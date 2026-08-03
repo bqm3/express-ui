@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Stack,
   Typography,
+  TextField,
 } from '@mui/material';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { uploadApi } from '@/lib/api/uploadApi';
@@ -67,21 +68,30 @@ export default function ImageUploader({
         hidden
         onChange={(e) => handleFile(e.target.files?.[0])}
       />
-      <Button
-        variant="outlined"
-        startIcon={
-          loading ? (
-            <CircularProgress size={16} />
-          ) : (
-            <CloudUploadOutlinedIcon />
-          )
-        }
-        disabled={loading}
-        onClick={() => inputRef.current?.click()}
-        sx={{ alignSelf: 'flex-start' }}
-      >
-        {loading ? 'Đang tải lên...' : 'Chọn ảnh'}
-      </Button>
+      <Stack direction="row" spacing={1} sx={{ width: '100%', maxWidth: 360, alignItems: 'center' }}>
+        <TextField
+          size="small"
+          placeholder="Hoặc nhập/dán URL ảnh..."
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          sx={{ flex: 1 }}
+        />
+        <Button
+          variant="outlined"
+          startIcon={
+            loading ? (
+              <CircularProgress size={16} />
+            ) : (
+              <CloudUploadOutlinedIcon />
+            )
+          }
+          disabled={loading}
+          onClick={() => inputRef.current?.click()}
+          sx={{ flexShrink: 0 }}
+        >
+          {loading ? 'Đang tải...' : 'Upload'}
+        </Button>
+      </Stack>
       {error && <Alert severity="error">{error}</Alert>}
     </Stack>
   );
