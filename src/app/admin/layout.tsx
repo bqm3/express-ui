@@ -30,6 +30,8 @@ import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { authApi } from '@/lib/api/authApi';
 import { brandColors } from '@/lib/theme';
 
@@ -53,10 +55,20 @@ const navItems = [
     icon: <SupportAgentOutlinedIcon />,
   },
   { label: 'Liên hệ', href: '/admin/contacts', icon: <MailOutlinedIcon /> },
+  // {
+  //   label: 'Tracking logs',
+  //   href: '/admin/tracking-logs',
+  //   icon: <TimelineOutlinedIcon />,
+  // },
   {
-    label: 'Tracking logs',
-    href: '/admin/tracking-logs',
-    icon: <TimelineOutlinedIcon />,
+    label: 'Tài khoản',
+    href: '/admin/users',
+    icon: <ManageAccountsOutlinedIcon />,
+  },
+  {
+    label: 'Hồ sơ cá nhân',
+    href: '/admin/profile',
+    icon: <AccountCircleOutlinedIcon />,
   },
 ];
 
@@ -138,6 +150,13 @@ export default function AdminLayout({
       router.replace('/admin/login');
       return;
     }
+
+    const user = authApi.getUser();
+    if (pathname.startsWith('/admin/users') && user?.role !== 'admin') {
+      router.replace('/admin/403');
+      return;
+    }
+
     setReady(true);
   }, [isLogin, router, pathname]);
 
@@ -202,7 +221,14 @@ export default function AdminLayout({
       </Box>
 
       <List sx={{ flex: 1, px: 0, py: 0 }}>
-        {navItems.map((item) => {
+        {navItems
+          .filter((item) => {
+            if (item.href === '/admin/users') {
+              return authApi.getUser()?.role === 'admin';
+            }
+            return true;
+          })
+          .map((item) => {
           const selected = pathname.startsWith(item.href);
           return (
             <ListItemButton

@@ -198,26 +198,45 @@ export default function HomePageView({
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 8 }}>
             <Stack spacing={{ xs: 4, md: 5 }}>
-              <Box>
-                <Typography
-                  variant="h4"
-                  component="h2"
-                  sx={{ mb: 2, color: brandColors.blue, fontWeight: 800 }}
-                >
-                  Giới thiệu công ty chuyển phát nhanh Ánh Sáng Toàn Cầu
-                </Typography>
-                <Typography
-                  sx={{
-                    color: 'text.secondary',
-                    lineHeight: 1.85,
-                  }}
-                >
-                  GLOBAL LIGHT EXPRESS — chúng tôi chuyên vận chuyển hàng hóa đi
-                  nước ngoài và nhập hàng từ tất cả các nước về Việt Nam bằng đường
-                  hàng không. Nhận vận chuyển hàng đặc biệt như mỹ phẩm, thuốc,
-                  hàng cồng kềnh, quá khổ… với dịch vụ chất lượng và giá thành cạnh
-                  tranh tại TP. Hồ Chí Minh.
-                </Typography>
+              <Box
+                className="home-intro"
+                sx={{
+                  bgcolor: '#ffba00',
+                  color: '#1a1a1a',
+                  p: { xs: 2.5, md: 3 },
+                  borderRadius: 2,
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+                }}
+              >
+                <Box className="introbrief">
+                  <Box className="tit">
+                    <Typography
+                      variant="h4"
+                      component="h2"
+                      sx={{
+                        mb: 1.5,
+                        color: '#1b2974',
+                        fontWeight: 800,
+                        fontSize: { xs: '1.25rem', md: '1.5rem' },
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      Giới thiệu công ty chuyển phát nhanh Ánh Sáng Toàn Cầu
+                    </Typography>
+                  </Box>
+                  <Box className="dtext">
+                    <Typography
+                      component="p"
+                      sx={{
+                        color: '#222222',
+                        fontSize: { xs: '0.925rem', md: '0.975rem' },
+                        lineHeight: 1.75,
+                      }}
+                    >
+                      GLOBAL LIGHT EXPRESS - chúng tôi chuyên vận chuyển hàng hóa đi nước ngoài và nhập hàng ở tất cả các nước về Việt Nam bằng đường hàng không. Nhận vận chuyển các loại hàng hóa đặc biệt như Mỹ Phẩm, thuốc tây, thuốc nam, hàng hóa cồng kềnh, quá khổ...với dịch vụ chất lượng và giá thành rẻ để phục vụ quý khách hàng có nhu cầu gửi thư từ và hàng hóa di China, Hong Kong, Singapore, Malaysia, Campuchia, Thailand
+                    </Typography>
+                  </Box>
+                </Box>
               </Box>
 
               <Box>

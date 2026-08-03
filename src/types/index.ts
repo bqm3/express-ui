@@ -4,7 +4,10 @@ export type ContactStatus = 'new' | 'processing' | 'done' | 'spam';
 
 export type Carrier = 'DHL' | 'FEDEX' | 'UPS';
 
-export type AdminRole = 'admin' | 'manager';
+export enum AdminRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -105,6 +108,8 @@ export interface Post {
   publishedAt: string | null;
   createdBy: number | null;
   updatedBy: number | null;
+  creator?: { id: number; fullName: string; username: string };
+  updater?: { id: number; fullName: string; username: string };
   createdAt: string;
   updatedAt: string;
   isDeleted?: boolean;
@@ -334,4 +339,33 @@ export interface CreateContactChannelPayload {
 }
 
 export type UpdateContactChannelPayload = Partial<CreateContactChannelPayload>;
+
+
+
+export interface User {
+  id: number;
+  username: string;
+  fullName: string;
+  role: AdminRole;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateUserDto {
+  username: string;
+  password?: string;
+  fullName: string;
+  role: AdminRole;
+}
+
+export interface UpdateUserDto {
+  fullName?: string;
+  role?: AdminRole;
+}
+
+export interface ChangePasswordDto {
+  newPassword: string;
+}
+
 

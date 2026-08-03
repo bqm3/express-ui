@@ -182,9 +182,38 @@ export default function AdminPostsPage() {
       ),
     },
     {
+      id: 'createdAt',
+      label: 'Ngày tạo',
+      minWidth: 160,
+      render: (row) => (
+        <Stack spacing={0.5}>
+          <Typography variant="body2">
+            {dayjs(row.createdAt).format('DD/MM/YYYY HH:mm')}
+          </Typography>
+          {row.creator && (
+            <Typography variant="caption" color="text.secondary">
+              Bởi: {row.creator.fullName}
+            </Typography>
+          )}
+        </Stack>
+      ),
+    },
+    {
       id: 'updatedAt',
       label: 'Cập nhật',
-      render: (row) => dayjs(row.updatedAt).format('DD/MM/YYYY HH:mm'),
+      minWidth: 160,
+      render: (row) => (
+        <Stack spacing={0.5}>
+          <Typography variant="body2">
+            {dayjs(row.updatedAt).format('DD/MM/YYYY HH:mm')}
+          </Typography>
+          {row.updater && (
+            <Typography variant="caption" color="text.secondary">
+              Bởi: {row.updater.fullName}
+            </Typography>
+          )}
+        </Stack>
+      ),
     },
     {
       id: 'actions',

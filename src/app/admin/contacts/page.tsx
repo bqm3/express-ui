@@ -129,7 +129,7 @@ export default function AdminContactsPage() {
 
   return (
     <AdminTable
-      title="Yêu cầu liên hệ"
+      title=""
       columns={columns}
       rows={rows}
       getRowId={(r) => r.id}
