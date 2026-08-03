@@ -1,5 +1,5 @@
 import apiClient from './client';
-import type { LoginPayload, LoginResult } from '@/types';
+import type { AdminUser, LoginPayload, LoginResult } from '@/types';
 
 export const authApi = {
   login(payload: LoginPayload) {
@@ -20,7 +20,7 @@ export const authApi = {
     return localStorage.getItem('admin_token');
   },
 
-  getUser(): any | null {
+  getUser(): AdminUser | null {
     if (typeof window === 'undefined') return null;
     const user = localStorage.getItem('admin_user');
     return user ? JSON.parse(user) : null;

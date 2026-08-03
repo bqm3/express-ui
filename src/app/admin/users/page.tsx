@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   Chip,
@@ -20,11 +20,7 @@ import UserForm from '@/components/admin/users/UserForm';
 import ChangePasswordForm from '@/components/admin/users/ChangePasswordForm';
 import { brandColors } from '@/lib/theme';
 
-import { useRouter } from 'next/navigation';
-import { authApi } from '@/lib/api/authApi';
-
 export default function AdminUsersPage() {
-  const router = useRouter();
   const snackbar = useSnackbar();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,35 +39,39 @@ export default function AdminUsersPage() {
   const debouncedSearch = useDebounce(search, 400);
   const [roleFilter, setRoleFilter] = useState('');
 
-  const load = async (
-    p = 1,
-    overrides?: { search?: string; role?: string },
-  ) => {
-    const nextSearch = overrides?.search ?? debouncedSearch;
-    const nextRole = overrides?.role ?? roleFilter;
+  const load = useCallback(
+    async (
+      p = 1,
+      overrides?: { search?: string; role?: string },
+    ) => {
+      const nextSearch = overrides?.search ?? debouncedSearch;
+      const nextRole = overrides?.role ?? roleFilter;
 
-    try {
-      setLoading(true);
-      const data = await usersApi.getAll({
-        page: p,
-        limit: 15,
-        search: nextSearch || undefined,
-        role: nextRole || undefined,
-      });
-      setUsers(data.items);
-      setPage(data.page);
-      setTotalPages(data.totalPages || 1);
-      setTotal(data.total || 0);
-    } catch (err: any) {
-      snackbar.error(err.message || 'Lỗi tải danh sách người dùng');
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        setLoading(true);
+        const data = await usersApi.getAll({
+          page: p,
+          limit: 15,
+          search: nextSearch || undefined,
+          role: nextRole || undefined,
+        });
+        setUsers(data.items);
+        setPage(data.page);
+        setTotalPages(data.totalPages || 1);
+        setTotal(data.total || 0);
+      } catch (err: unknown) {
+        const errorMsg = (err as { message?: string })?.message || 'Lỗi tải danh sách người dùng';
+        snackbar.error(errorMsg);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [debouncedSearch, roleFilter, snackbar],
+  );
 
   useEffect(() => {
     load(1, { search: debouncedSearch });
-  }, [debouncedSearch]);
+  }, [debouncedSearch, load]);
 
   const handleOpenCreate = () => {
     setEditingUser(null);
@@ -110,8 +110,9 @@ export default function AdminUsersPage() {
       }
       handleCloseForm();
       load(page);
-    } catch (error: any) {
-      snackbar.error(error.message || 'Có lỗi xảy ra');
+    } catch (error: unknown) {
+      const errorMsg = (error as { message?: string })?.message || 'Có lỗi xảy ra';
+      snackbar.error(errorMsg);
     } finally {
       setSubmitting(false);
     }
@@ -124,8 +125,9 @@ export default function AdminUsersPage() {
       await usersApi.changePassword(passwordUser.id, data);
       snackbar.success('Đổi mật khẩu thành công');
       handleClosePasswordForm();
-    } catch (error: any) {
-      snackbar.error(error.message || 'Có lỗi xảy ra');
+    } catch (error: unknown) {
+      const errorMsg = (error as { message?: string })?.message || 'Có lỗi xảy ra';
+      snackbar.error(errorMsg);
     } finally {
       setSubmitting(false);
     }
@@ -137,8 +139,9 @@ export default function AdminUsersPage() {
       await usersApi.delete(id);
       snackbar.success('Đã xóa tài khoản');
       load(page);
-    } catch (error: any) {
-      snackbar.error(error.message || 'Xóa thất bại');
+    } catch (error: unknown) {
+      const errorMsg = (error as { message?: string })?.message || 'Xóa thất bại';
+      snackbar.error(errorMsg);
     }
   };
 

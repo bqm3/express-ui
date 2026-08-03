@@ -1,8 +1,8 @@
 import apiClient from './client';
-import { User, CreateUserDto, UpdateUserDto, ChangePasswordDto, PaginatedResult } from '@/types';
+import { User, UserQuery, CreateUserDto, UpdateUserDto, ChangePasswordDto, PaginatedResult } from '@/types';
 
 export const usersApi = {
-  getAll: async (params?: any) => {
+  getAll: async (params?: UserQuery) => {
     const { data } = await apiClient.get<PaginatedResult<User>>('/users', { params });
     return data;
   },

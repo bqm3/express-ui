@@ -24,7 +24,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
-import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';

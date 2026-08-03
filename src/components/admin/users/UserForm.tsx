@@ -29,6 +29,13 @@ interface UserFormProps {
   loading?: boolean;
 }
 
+interface UserFormData {
+  username?: string;
+  password?: string;
+  fullName: string;
+  role: AdminRole;
+}
+
 export default function UserForm({
   open,
   user,
@@ -44,7 +51,7 @@ export default function UserForm({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<any>({
+  } = useForm<UserFormData>({
     defaultValues: {
       username: '',
       password: '',

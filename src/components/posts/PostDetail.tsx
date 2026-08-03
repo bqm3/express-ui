@@ -1,5 +1,4 @@
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import dayjs from 'dayjs';
 import type { Post } from '@/types';
 import { brandColors } from '@/lib/theme';
 import ContactForm from '@/components/contact/ContactForm';

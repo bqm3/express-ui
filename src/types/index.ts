@@ -342,6 +342,11 @@ export type UpdateContactChannelPayload = Partial<CreateContactChannelPayload>;
 
 
 
+export interface UserQuery extends PaginationQuery {
+  search?: string;
+  role?: string;
+}
+
 export interface User {
   id: number;
   username: string;

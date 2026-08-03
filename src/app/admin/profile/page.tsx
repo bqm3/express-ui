@@ -55,14 +55,15 @@ export default function ProfilePage() {
           setUser(data);
           resetProfile({ fullName: data.fullName });
         }
-      } catch (err: any) {
-        snackbar.error(err.message || 'Lỗi tải thông tin');
+      } catch (err: unknown) {
+        const errorMsg = (err as { message?: string })?.message || 'Lỗi tải thông tin';
+        snackbar.error(errorMsg);
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
-  }, [resetProfile]);
+  }, [resetProfile, snackbar]);
 
   const onUpdateProfile = async (data: UpdateUserDto) => {
     if (!user) return;
@@ -78,8 +79,9 @@ export default function ProfilePage() {
           user: { ...session, fullName: data.fullName },
         });
       }
-    } catch (err: any) {
-      snackbar.error(err.message || 'Lỗi cập nhật');
+    } catch (err: unknown) {
+      const errorMsg = (err as { message?: string })?.message || 'Lỗi cập nhật';
+      snackbar.error(errorMsg);
     } finally {
       setSubmitting(false);
     }
@@ -92,8 +94,9 @@ export default function ProfilePage() {
       await usersApi.changePassword(user.id, data);
       snackbar.success('Đổi mật khẩu thành công');
       resetPassword({ newPassword: '' });
-    } catch (err: any) {
-      snackbar.error(err.message || 'Lỗi đổi mật khẩu');
+    } catch (err: unknown) {
+      const errorMsg = (err as { message?: string })?.message || 'Lỗi đổi mật khẩu';
+      snackbar.error(errorMsg);
     } finally {
       setSubmitting(false);
     }
