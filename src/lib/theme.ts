@@ -1,81 +1,104 @@
 import { createTheme } from '@mui/material/styles';
 
-/** Velocity Logistics System — brand tokens */
+/** Velocity Logistic Identity — Brand tokens */
 export const brandColors = {
-  // Core brand
-  primary: '#1b2974',
-  primaryContainer: '#34418c',
+  // Core theme tokens
+  surface: '#f9f9ff',
+  surfaceDim: '#cfdaf2',
+  surfaceBright: '#f9f9ff',
+  surfaceContainerLowest: '#ffffff',
+  surfaceContainerLow: '#f0f3ff',
+  surfaceContainer: '#e7eeff',
+  surfaceContainerHigh: '#dee8ff',
+  surfaceContainerHighest: '#d8e3fb',
+  onSurface: '#111c2d',
+  onSurfaceVariant: '#3e4945',
+  inverseSurface: '#263143',
+  inverseOnSurface: '#ecf1ff',
+  outline: '#6e7a75',
+  outlineVariant: '#bdc9c4',
+  surfaceTint: '#006b57',
+
+  primary: '#00614f',
   onPrimary: '#ffffff',
-  onPrimaryContainer: '#a6b1ff',
-  inversePrimary: '#bbc3ff',
-  surfaceTint: '#4c58a5',
-  brandBlueDark: '#263066',
+  primaryContainer: '#0d7c66',
+  onPrimaryContainer: '#bbffe9',
+  inversePrimary: '#7bd7bd',
 
-  secondary: '#7d5700',
-  secondaryContainer: '#feb71a',
+  secondary: '#9d4300',
   onSecondary: '#ffffff',
-  onSecondaryContainer: '#6b4b00',
-  brandGoldLight: '#FDF4B8',
-  gold: '#FFB81C',
+  secondaryContainer: '#fd761a',
+  onSecondaryContainer: '#5c2400',
 
-  tertiary: '#4e2700',
-  tertiaryContainer: '#6f3a00',
+  tertiary: '#21604c',
   onTertiary: '#ffffff',
-  onTertiaryContainer: '#f2a666',
+  tertiaryContainer: '#3c7964',
+  onTertiaryContainer: '#c0ffe5',
 
   error: '#ba1a1a',
   onError: '#ffffff',
   errorContainer: '#ffdad6',
-  statusError: '#D32F2F',
-  statusSuccess: '#2E7D32',
+  onErrorContainer: '#93000a',
 
-  background: '#f8f9fb',
-  onBackground: '#191c1e',
-  surface: '#f8f9fb',
-  surfaceDim: '#d9dadc',
-  surfaceBright: '#f8f9fb',
-  surfaceLowest: '#ffffff',
-  surfaceLow: '#f3f4f6',
-  surfaceContainer: '#edeef0',
-  surfaceHigh: '#e7e8ea',
-  surfaceHighest: '#e1e2e4',
-  surfaceVariant: '#e1e2e4',
-  onSurface: '#191c1e',
-  onSurfaceVariant: '#454651',
-  inverseSurface: '#2e3132',
-  inverseOnSurface: '#f0f1f3',
-  outline: '#767682',
-  outlineVariant: '#c6c5d2',
-  surfaceBorder: '#E6E6E6',
+  primaryFixed: '#97f4d9',
+  primaryFixedDim: '#7bd7bd',
+  onPrimaryFixed: '#002019',
+  onPrimaryFixedVariant: '#005141',
+
+  secondaryFixed: '#ffdbca',
+  secondaryFixedDim: '#ffb690',
+  onSecondaryFixed: '#341100',
+  onSecondaryFixedVariant: '#783200',
+
+  tertiaryFixed: '#b0f0d6',
+  tertiaryFixedDim: '#95d3ba',
+  onTertiaryFixed: '#002117',
+  onTertiaryFixedVariant: '#0b513d',
+
+  background: '#f9f9ff',
+  onBackground: '#111c2d',
+  surfaceVariant: '#d8e3fb',
+  surfaceWhite: '#FFFFFF',
+  forestDeep: '#064E3B',
+  velocityOrange: '#F97316',
+  slateText: '#1E293B',
 
   // Backward-compatible aliases (existing components)
-  blue: '#34418c',
-  blueDark: '#1b2974',
-  blueLight: '#4c58a5',
-  yellow: '#FFB81C',
-  yellowDark: '#7d5700',
+  blue: '#0d7c66',
+  blueDark: '#00614f',
+  blueLight: '#006b57',
+  yellow: '#F97316',
+  yellowDark: '#9d4300',
   red: '#ba1a1a',
-  navy: '#263066',
-  navyMuted: '#454651',
-  offWhite: '#f8f9fb',
-  mist: '#f3f4f6',
+  navy: '#064E3B',
+  navyMuted: '#3e4945',
+  offWhite: '#f9f9ff',
+  mist: '#f0f3ff',
   white: '#ffffff',
-  border: '#E6E6E6',
-  teal: '#34418c',
-  tealDark: '#1b2974',
-  tealLight: '#4c58a5',
-  amber: '#FFB81C',
-  amberDark: '#7d5700',
+  border: '#bdc9c4',
+  surfaceBorder: '#bdc9c4',
+  surfaceLowest: '#ffffff',
+  teal: '#0d7c66',
+  tealDark: '#00614f',
+  tealLight: '#006b57',
+  amber: '#F97316',
+  amberDark: '#9d4300',
+  gold: '#F97316',
+  brandGoldLight: '#ffdbca',
+  brandBlueDark: '#064E3B',
+  statusError: '#ba1a1a',
+  statusSuccess: '#0d7c66',
 };
 
 export const brandFonts = {
-  headline: 'var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif',
-  body: 'var(--font-inter), Inter, sans-serif',
+  headline: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif',
+  body: 'var(--font-be-vietnam-pro), "Be Vietnam Pro", sans-serif',
+  labelCaps: 'var(--font-archivo-narrow), "Archivo Narrow", sans-serif',
   code: 'var(--font-jetbrains-mono), "JetBrains Mono", monospace',
 };
 
 export const brandShadow = {
-  level2: '0px 4px 20px rgba(52, 65, 140, 0.08)',
+  level2: '0px 4px 20px rgba(13, 124, 102, 0.08)',
 };
 
 const theme = createTheme({
@@ -85,52 +108,52 @@ const theme = createTheme({
     primary: {
       main: brandColors.primaryContainer,
       dark: brandColors.primary,
-      light: brandColors.surfaceTint,
+      light: brandColors.inversePrimary,
       contrastText: brandColors.onPrimary,
     },
     secondary: {
-      main: brandColors.gold,
+      main: brandColors.velocityOrange,
       dark: brandColors.secondary,
-      light: brandColors.brandGoldLight,
-      contrastText: brandColors.primary,
+      light: brandColors.secondaryFixedDim,
+      contrastText: brandColors.onSecondary,
     },
     error: {
       main: brandColors.error,
       contrastText: brandColors.onError,
     },
     success: {
-      main: brandColors.statusSuccess,
+      main: brandColors.primaryContainer,
     },
     background: {
       default: brandColors.background,
-      paper: brandColors.surfaceLowest,
+      paper: brandColors.surfaceWhite,
     },
     text: {
       primary: brandColors.onSurface,
       secondary: brandColors.onSurfaceVariant,
     },
-    divider: brandColors.surfaceBorder,
+    divider: brandColors.outlineVariant,
   },
   typography: {
     fontFamily: brandFonts.body,
     h1: {
       fontFamily: brandFonts.headline,
-      fontWeight: 800,
-      fontSize: '3rem',
-      lineHeight: '3.5rem',
+      fontWeight: 700,
+      fontSize: '3rem', // 48px
+      lineHeight: '3.5rem', // 56px
       letterSpacing: '-0.02em',
     },
     h2: {
       fontFamily: brandFonts.headline,
       fontWeight: 700,
-      fontSize: '2rem',
-      lineHeight: '2.5rem',
+      fontSize: '2rem', // 32px
+      lineHeight: '2.5rem', // 40px
     },
     h3: {
       fontFamily: brandFonts.headline,
-      fontWeight: 700,
-      fontSize: '1.5rem',
-      lineHeight: '2rem',
+      fontWeight: 600,
+      fontSize: '1.5rem', // 24px
+      lineHeight: '2rem', // 32px
     },
     h4: {
       fontFamily: brandFonts.headline,
@@ -141,45 +164,44 @@ const theme = createTheme({
     h5: {
       fontFamily: brandFonts.headline,
       fontWeight: 600,
-      fontSize: '1.25rem',
-      lineHeight: '1.75rem',
+      fontSize: '1.125rem',
+      lineHeight: '1.5rem',
     },
     h6: {
       fontFamily: brandFonts.headline,
       fontWeight: 600,
-      fontSize: '1.125rem',
+      fontSize: '1rem',
       lineHeight: '1.5rem',
     },
     body1: {
       fontFamily: brandFonts.body,
-      fontSize: '1rem',
+      fontSize: '1.125rem', // 18px (body-lg)
       fontWeight: 400,
-      lineHeight: '1.5rem',
+      lineHeight: '1.75rem', // 28px
     },
     body2: {
       fontFamily: brandFonts.body,
-      fontSize: '0.875rem',
+      fontSize: '1rem', // 16px (body-md)
       fontWeight: 400,
-      lineHeight: '1.25rem',
+      lineHeight: '1.5rem', // 24px
     },
     overline: {
-      fontFamily: brandFonts.body,
-      fontSize: '0.75rem',
-      fontWeight: 700,
+      fontFamily: brandFonts.labelCaps,
+      fontSize: '0.875rem', // 14px (label-caps)
+      fontWeight: 600,
       letterSpacing: '0.05em',
-      lineHeight: '1rem',
+      lineHeight: '1.25rem', // 20px
       textTransform: 'uppercase',
     },
     button: {
       fontFamily: brandFonts.body,
-      fontWeight: 700,
-      fontSize: '0.75rem',
-      letterSpacing: '0.05em',
-      textTransform: 'uppercase',
-      lineHeight: '1rem',
+      fontWeight: 600,
+      fontSize: '1rem', // 16px
+      lineHeight: '1.5rem', // 24px
+      textTransform: 'none',
     },
   },
-  shape: { borderRadius: 4 },
+  shape: { borderRadius: 6 },
   shadows: [
     'none',
     brandShadow.level2,
@@ -211,7 +233,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 4,
+          borderRadius: 6,
           boxShadow: 'none',
           '&:hover': { boxShadow: 'none' },
         },
@@ -228,17 +250,18 @@ const theme = createTheme({
         {
           props: { variant: 'contained', color: 'secondary' },
           style: {
-            backgroundColor: brandColors.gold,
-            color: brandColors.primary,
-            fontWeight: 700,
+            backgroundColor: brandColors.velocityOrange,
+            color: brandColors.onSecondary,
+            fontWeight: 600,
             '&:hover': { backgroundColor: brandColors.secondaryContainer },
           },
         },
         {
           props: { variant: 'outlined', color: 'primary' },
           style: {
-            borderColor: brandColors.primaryContainer,
+            borderColor: brandColors.outlineVariant,
             color: brandColors.primaryContainer,
+            '&:hover': { borderColor: brandColors.primaryContainer },
           },
         },
       ],
@@ -246,11 +269,11 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: 6,
           backgroundImage: 'none',
         },
         outlined: {
-          borderColor: brandColors.surfaceBorder,
+          borderColor: brandColors.outlineVariant,
         },
       },
     },
@@ -276,7 +299,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          border: `1px solid ${brandColors.surfaceBorder}`,
+          border: `1px solid ${brandColors.outlineVariant}`,
           boxShadow: 'none',
         },
       },
@@ -288,7 +311,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 4,
+            borderRadius: 6,
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
               borderWidth: 2,
               borderColor: brandColors.primaryContainer,
@@ -300,10 +323,10 @@ const theme = createTheme({
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: 4,
-          fontFamily: brandFonts.body,
-          fontWeight: 700,
-          fontSize: '0.75rem',
+          borderRadius: 6,
+          fontFamily: brandFonts.labelCaps,
+          fontWeight: 600,
+          fontSize: '0.875rem',
           letterSpacing: '0.05em',
           textTransform: 'uppercase',
         },

@@ -4,27 +4,16 @@ import { mediaApi } from '@/lib/api/mediaApi';
 
 export const dynamic = 'force-dynamic';
 
-async function getRecentPosts() {
+async function getCategoryPosts(categorySlug: string, limit = 6) {
   try {
-    return await postsApi.list({
-      categorySlug: 'cam-nang',
+    const res = await postsApi.list({
+      categorySlug,
       page: 1,
-      limit: 6,
+      limit,
     });
+    return res.items || [];
   } catch {
-    return { items: [], page: 1, limit: 6, total: 0, totalPages: 0 };
-  }
-}
-
-async function getCountryPosts() {
-  try {
-    return await postsApi.list({
-      categorySlug: 'gui-hang-di-nuoc-ngoai',
-      page: 1,
-      limit: 6,
-    });
-  } catch {
-    return { items: [], page: 1, limit: 6, total: 0, totalPages: 0 };
+    return [];
   }
 }
 
@@ -37,16 +26,21 @@ async function getBanners() {
 }
 
 export default async function HomePage() {
-  const [recent, countryPosts, banners] = await Promise.all([
-    getRecentPosts(),
-    getCountryPosts(),
-    getBanners(),
-  ]);
+  const [guiHangPosts, chuyenPhatNhanhPosts, camNangPosts, carrierPosts, banners] =
+    await Promise.all([
+      getCategoryPosts('gui-hang-di-nuoc-ngoai', 4),
+      getCategoryPosts('chuyen-phat-nhanh', 4),
+      getCategoryPosts('cam-nang', 6),
+      getCategoryPosts('hang-van-chuyen', 3),
+      getBanners(),
+    ]);
 
   return (
     <HomePageView
-      recentPosts={recent.items}
-      countryPosts={countryPosts.items}
+      guiHangPosts={guiHangPosts}
+      chuyenPhatNhanhPosts={chuyenPhatNhanhPosts}
+      camNangPosts={camNangPosts}
+      carrierPosts={carrierPosts}
       banners={banners}
     />
   );

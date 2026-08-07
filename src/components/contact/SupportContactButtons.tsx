@@ -2,7 +2,7 @@
 
 import { Box, Stack, Typography } from '@mui/material';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
-import FacebookIcon from '@mui/icons-material/Facebook';
+// FacebookIcon replaced by PNG asset
 import EmailIcon from '@mui/icons-material/Email';
 import LinkIcon from '@mui/icons-material/Link';
 import type { ContactChannel, ContactChannelType } from '@/types';
@@ -12,43 +12,35 @@ import {
 } from '@/lib/contactChannel';
 import { brandColors } from '@/lib/theme';
 
-function ZaloIcon() {
-  return (
-    <Box
-      component="svg"
-      viewBox="0 0 24 24"
-      sx={{ width: 18, height: 18, display: 'block' }}
-      aria-hidden
-    >
-      <circle cx="12" cy="12" r="11" fill="#0068FF" />
-      <text
-        x="12"
-        y="16"
-        textAnchor="middle"
-        fill="#fff"
-        fontSize="10"
-        fontWeight="800"
-        fontFamily="Arial, sans-serif"
-      >
-        Z
-      </text>
-    </Box>
-  );
-}
-
 function channelIcon(channel: ContactChannelType) {
   const sx = { fontSize: 18 };
   switch (channel) {
     case 'zalo':
-      return <ZaloIcon />;
+      return (
+        <Box
+          component="img"
+          src="/zalo.png"
+          alt="Zalo"
+          aria-hidden
+          sx={{ width: 18, height: 18, display: 'block', objectFit: 'contain', bgcolor: '#0068FF' }}
+        />
+      );
     case 'facebook':
-      return <FacebookIcon sx={{ ...sx, color: '#1877F2' }} />;
+      return (
+        <Box
+          component="img"
+          src="/facebook.png"
+          alt="Facebook"
+          aria-hidden
+          sx={{ width: 18, height: 18, display: 'block', objectFit: 'contain' }}
+        />
+      );
     case 'email':
       return <EmailIcon sx={{ ...sx, color: brandColors.blue }} />;
     case 'other':
       return <LinkIcon sx={{ ...sx, color: brandColors.navy }} />;
     default:
-      return <PhoneInTalkIcon sx={{ ...sx, color: brandColors.yellowDark }} />;
+      return <PhoneInTalkIcon sx={{ ...sx, color: 'red' }} />;
   }
 }
 
@@ -96,12 +88,12 @@ export default function SupportContactButtons({
               color: isHome ? '#fff' : brandColors.navy,
               borderRadius: 0,
               transition: 'filter 0.15s ease, background-color 0.15s ease',
-              '&:hover': {
-                filter: 'brightness(0.95)',
-                bgcolor: isHome
-                  ? brandColors.blueDark
-                  : brandColors.secondaryContainer,
-              },
+              // '&:hover': {
+              //   filter: 'brightness(0.95)',
+              //   bgcolor: isHome
+              //     ? brandColors.blueDark
+              //     : brandColors.secondaryContainer,
+              // },
             }}
           >
             <Box
@@ -111,9 +103,9 @@ export default function SupportContactButtons({
                 flexShrink: 0,
                 display: 'grid',
                 placeItems: 'center',
-                bgcolor: isHome
-                  ? 'rgba(255,255,255,0.14)'
-                  : 'rgba(255,255,255,0.55)',
+                // bgcolor: isHome
+                //   ? 'rgba(255,255,255,0.14)'
+                //   : 'rgba(255,255,255,0.55)',
               }}
             >
               {channelIcon(c.channel)}

@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import Header from './Header';
 import Footer from './Footer';
+import BackToTop from './BackToTop';
+import FloatingContactButtons from '@/components/contact/FloatingContactButtons';
 
 export default function PublicShell({
   children,
@@ -20,6 +22,8 @@ export default function PublicShell({
         {children}
       </Box>
       <Footer />
+      <BackToTop />
+      <FloatingContactButtons />
     </Box>
   );
 }

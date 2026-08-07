@@ -22,7 +22,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import { brandColors } from '@/lib/theme';
+import { brandColors, brandFonts } from '@/lib/theme';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import type { MenuCategoryItem } from '@/types';
 
@@ -172,8 +172,7 @@ export default function Header() {
               <Box>
                 <Typography
                   sx={{
-                    fontFamily:
-                      'var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif',
+                    fontFamily: brandFonts.headline,
                     fontWeight: 800,
                     fontSize: { xs: '1.25rem', md: '1.45rem' },
                     color: brandColors.blue,
@@ -181,7 +180,7 @@ export default function Header() {
                     letterSpacing: 0.5,
                   }}
                 >
-                  GLEXPRESS
+                  GLLOGISTICS
                 </Typography>
                 <Typography
                   variant="caption"
@@ -193,7 +192,7 @@ export default function Header() {
                     fontSize: 10,
                   }}
                 >
-                  Chuyển phát nhanh Ánh Sáng Toàn Cầu
+                  CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM
                 </Typography>
               </Box>
             </Box>
@@ -422,7 +421,7 @@ export default function Header() {
           <Typography
             sx={{ px: 2, pb: 1, fontWeight: 800, color: brandColors.blue }}
           >
-            GLEXPRESS.NET
+            GLLOGISTICS.NET
           </Typography>
           <List dense>
             {navItems.map((item) => {

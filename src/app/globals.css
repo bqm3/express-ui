@@ -6,9 +6,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-inter), Inter, sans-serif;
-  background-color: #f8f9fb;
-  color: #191c1e;
+  font-family: var(--font-be-vietnam-pro), 'Be Vietnam Pro', sans-serif;
+  background-color: #f9f9ff;
+  color: #111c2d;
 }
 
 a {
@@ -21,12 +21,124 @@ img {
   display: block;
 }
 
-/* Home Intro Section Styles */
+/* ===================== ANIMATION KEYFRAMES ===================== */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes floatX {
+  0%, 100% { transform: translateX(0px); }
+  50%       { transform: translateX(10px); }
+}
+
+@keyframes truckDrive {
+  0%   { transform: translateX(-120px); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(calc(100vw + 120px)); opacity: 0; }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes pulseScale {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes dotBlink {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.85); }
+  40%           { opacity: 1;   transform: scale(1); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(5px); }
+}
+
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(13,124,102,0); }
+  50%       { box-shadow: 0 0 0 6px rgba(13,124,102,0.12); }
+}
+
+@keyframes bgShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===================== ANIMATION UTILITY CLASSES ===================== */
+
+.anim-fade-up {
+  animation: fadeInUp 0.6s ease both;
+}
+.anim-fade-up-d1 { animation: fadeInUp 0.6s ease 0.1s both; }
+.anim-fade-up-d2 { animation: fadeInUp 0.6s ease 0.2s both; }
+.anim-fade-up-d3 { animation: fadeInUp 0.6s ease 0.35s both; }
+.anim-fade-up-d4 { animation: fadeInUp 0.6s ease 0.5s both; }
+
+.anim-fade-left  { animation: fadeInLeft  0.6s ease both; }
+.anim-fade-right { animation: fadeInRight 0.6s ease both; }
+
+.anim-float { animation: floatY 3.5s ease-in-out infinite; }
+.anim-float-x { animation: floatX 4s ease-in-out infinite; }
+
+.anim-pulse { animation: pulseScale 2.5s ease-in-out infinite; }
+
+.anim-spin-slow { animation: spinSlow 8s linear infinite; }
+
+.anim-arrow-bounce { animation: arrowBounce 1.4s ease-in-out infinite; }
+
+.anim-shimmer {
+  background: linear-gradient(90deg, #e7eeff 25%, #f0f3ff 50%, #e7eeff 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.anim-border-glow { animation: borderGlow 2.5s ease-in-out infinite; }
+
+/* ===================== HOME INTRO ===================== */
+
 .home-intro {
-  background-color: #ffba00;
+  background-color: #f0f3ff;
   padding: 20px 24px;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid #bdc9c4;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 
 .home-intro .introbrief {
@@ -34,16 +146,30 @@ img {
 }
 
 .home-intro .tit h2 {
-  color: #1b2974;
+  color: #0d7c66;
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 700;
   margin-top: 0;
   margin-bottom: 12px;
 }
 
 .home-intro .dtext p {
-  color: #222222;
-  font-size: 0.975rem;
+  color: #3e4945;
+  font-size: 1rem;
   line-height: 1.75;
   margin: 0;
+}
+
+/* ===================== STATS COUNTER ===================== */
+.stat-number {
+  animation: countUp 0.8s ease both;
+  display: inline-block;
+}
+
+/* ===================== TYPED CURSOR ===================== */
+.typed-cursor::after {
+  content: '|';
+  animation: dotBlink 1s infinite;
+  color: #fd761a;
+  font-weight: 300;
 }

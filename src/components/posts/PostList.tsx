@@ -33,8 +33,18 @@ export default function PostList({
   return (
     <Stack spacing={4}>
       <Grid container spacing={2.5}>
-        {posts.map((post) => (
-          <Grid key={post.id} size={{ xs: 12, sm: 6 }}>
+        {posts.map((post, idx) => (
+          <Grid
+            key={post.id}
+            size={{ xs: 12, sm: 6 }}
+            sx={{
+              animation: `fadeInUp 0.6s ease ${idx * 0.08}s both`,
+              '@keyframes fadeInUp': {
+                from: { opacity: 0, transform: 'translateY(20px)' },
+                to: { opacity: 1, transform: 'translateY(0)' },
+              },
+            }}
+          >
             <PostCard post={post} />
           </Grid>
         ))}

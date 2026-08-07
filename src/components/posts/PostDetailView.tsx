@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import type { Post } from '@/types';
-import { brandColors } from '@/lib/theme';
+import { brandColors, brandFonts } from '@/lib/theme';
 import ContentWithSidebar from '@/components/layout/ContentWithSidebar';
 
 interface PostDetailViewProps {
@@ -60,15 +60,17 @@ export default function PostDetailView({
             component="h1"
             sx={{
               fontWeight: 800,
-              color: brandColors.yellow,
-              fontSize: { xs: '1.75rem', md: '2.1rem' },
+              color: brandColors.primaryContainer,
+              fontSize: { xs: '1.65rem', md: '2.1rem' },
+              lineHeight: 1.35,
+              letterSpacing: '-0.01em',
             }}
           >
-            {post.title.toUpperCase()}
+            {post.title}
           </Typography>
 
           {post.shortDescription && (
-            <Typography sx={{ color: 'text.secondary' }}>
+            <Typography sx={{ color: brandColors.onSurfaceVariant, fontSize: '1rem', lineHeight: 1.7 }}>
               {post.shortDescription}
             </Typography>
           )}
@@ -85,7 +87,7 @@ export default function PostDetailView({
               objectFit: 'cover',
               borderRadius: 0,
               mb: 3,
-              border: `1px solid ${brandColors.border}`,
+              border: `1px solid ${brandColors.outlineVariant}`,
             }}
           />
         )}
@@ -94,29 +96,31 @@ export default function PostDetailView({
           <Box
             sx={{
               height: 2,
-              bgcolor: brandColors.yellow,
+              bgcolor: brandColors.velocityOrange,
               mb: '3px',
             }}
           />
           <Box
             sx={{
-              height: 5,
-              bgcolor: brandColors.yellow,
+              height: 4,
+              bgcolor: brandColors.primaryContainer,
             }}
           />
           <Box
             className="post-content"
             dangerouslySetInnerHTML={{ __html: post.content }}
             sx={{
-              color: 'text.primary',
-              p: { xs: 2, md: 2.5 },
+              color: brandColors.onSurface,
+              p: { xs: 2.5, md: 3 },
               borderRadius: 0,
-              bgcolor: 'background.paper',
-              boxShadow: '0 4px 18px rgba(27, 41, 116, 0.12)',
-              '& p': { mb: 2, lineHeight: 1.8 },
+              bgcolor: '#ffffff',
+              border: `1px solid ${brandColors.outlineVariant}`,
+              borderTop: 'none',
+              boxShadow: '0 4px 18px rgba(17, 28, 45, 0.04)',
+              '& p': { mb: 2, lineHeight: 1.8, fontSize: '0.975rem' },
               '& h2, & h3, & h4': {
-                fontFamily:
-                  'var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif',
+                fontFamily: brandFonts.headline,
+                color: brandColors.primaryContainer,
                 mt: 3,
                 mb: 1.5,
               },
@@ -126,13 +130,13 @@ export default function PostDetailView({
                 borderRadius: 0,
                 my: 2,
               },
-              '& a': { color: brandColors.blue, textDecoration: 'underline' },
+              '& a': { color: brandColors.primaryContainer, textDecoration: 'underline' },
               '& ul, & ol': { pl: 3, mb: 2 },
               '& blockquote': {
-                borderLeft: `3px solid ${brandColors.yellow}`,
+                borderLeft: `4px solid ${brandColors.velocityOrange}`,
                 pl: 2,
                 ml: 0,
-                color: 'text.secondary',
+                color: brandColors.onSurfaceVariant,
                 fontStyle: 'italic',
               },
             }}

@@ -61,7 +61,7 @@ export default function PostLienHe({
         >
           <Box
             component="iframe"
-            title="Bản đồ liên hệ Glexpress"
+            title="Bản đồ liên hệ Gllogistics"
             src={mapEmbedUrl}
             loading="lazy"
             referrerPolicy="strict-origin-when-cross-origin"

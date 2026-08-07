@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import { brandColors } from '@/lib/theme';
+import { brandColors, brandFonts } from '@/lib/theme';
 
 const countryLinks = [
   'Gửi hàng đi Mỹ',
@@ -56,17 +56,17 @@ export default function Footer() {
           <Grid size={{ xs: 12, md: 4 }}>
             <Typography
               sx={{
-                fontFamily: 'var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif',
+                fontFamily: brandFonts.headline,
                 fontWeight: 800,
                 fontSize: '1.25rem',
                 color: brandColors.yellow,
                 mb: 1,
               }}
             >
-              GLEXPRESS
+              GLLOGISTICS
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.8, mb: 2, lineHeight: 1.7 }}>
-              Công Ty Chuyển Phát Nhanh Ánh Sáng Toàn Cầu — GLOBAL LIGHT EXPRESS.
+              CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.
               Chuyên vận chuyển hàng hóa đi nước ngoài và nhập hàng về Việt Nam.
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
@@ -81,7 +81,7 @@ export default function Footer() {
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'flex-start' }}>
                 <PlaceOutlinedIcon sx={{ fontSize: 18, mt: 0.3, color: brandColors.yellow }} />
                 <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                  Glexpress Quy Nhơn — Bình Định
+                  Gllogistics Quy Nhơn — Bình Định
                   <br />
                   ĐT: (056) 353 1419 — 091 442 7842
                 </Typography>
@@ -165,8 +165,7 @@ export default function Footer() {
 
         <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.12)' }} />
         <Typography variant="caption" sx={{ opacity: 0.55, display: 'block', textAlign: 'center' }}>
-          Bản quyền © 2010–{new Date().getFullYear()} thuộc Glexpress.net. Quản lý bởi Công Ty
-          Chuyển Phát Nhanh Ánh Sáng Toàn Cầu.
+          Bản quyền © 2010–{new Date().getFullYear()} thuộc Gllogistics.net. Quản lý bởi CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.
         </Typography>
       </Container>
     </Box>

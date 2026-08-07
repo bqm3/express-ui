@@ -49,7 +49,7 @@ export async function generateMetadata({
       post.ogDescription ||
       post.metaDescription ||
       post.shortDescription ||
-      'Glexpress — dịch vụ gửi hàng đi nước ngoài';
+      'Gllogistics — dịch vụ gửi hàng đi nước ngoài';
     const image = post.ogImage || post.thumbnail || undefined;
     const robots = post.robotsMeta || 'index,follow';
 
@@ -81,16 +81,16 @@ export async function generateMetadata({
 
   if (isContactPageSlug(resolved.category.slug)) {
     return {
-      title: `${resolved.category.name} | Glexpress`,
+      title: `${resolved.category.name} | Gllogistics`,
       description:
         resolved.category.shortDescription ||
         resolved.category.content?.replace(/<[^>]+>/g, '').slice(0, 160) ||
-        'Liên hệ Glexpress — tư vấn gửi hàng đi nước ngoài',
+        'Liên hệ Gllogistics — tư vấn gửi hàng đi nước ngoài',
     };
   }
 
   return {
-    title: `${resolved.category.name} | Glexpress`,
+    title: `${resolved.category.name} | Gllogistics`,
     description:
       resolved.category.content?.replace(/<[^>]+>/g, '').slice(0, 160) ||
       `Danh sách bài viết chuyên mục ${resolved.category.name}`,
