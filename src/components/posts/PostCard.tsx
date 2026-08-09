@@ -35,7 +35,13 @@ export default function PostCard({ post }: PostCardProps) {
       <CardActionArea
         component={Link}
         href={`/${post.slug}`}
-        sx={{ height: '100%', alignItems: 'stretch' }}
+        sx={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          justifyContent: 'flex-start',
+        }}
       >
         {post.thumbnail ? (
           <Box
@@ -49,12 +55,19 @@ export default function PostCard({ post }: PostCardProps) {
         ) : (
           <Box
             sx={{
-              height: 140,
-              background: `linear-gradient(135deg, ${brandColors.blue} 0%, ${brandColors.blueDark} 55%, ${brandColors.yellow} 140%)`,
+              height: 180,
+              bgcolor: '#00614f',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-          />
+          >
+            <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em' }}>
+              GLLOGISTICS
+            </Typography>
+          </Box>
         )}
-        <CardContent>
+        <CardContent sx={{ flexGrow: 1, p: 2.5, display: 'flex', flexDirection: 'column' }}>
           <Stack
             direction="row"
             spacing={1}
@@ -66,9 +79,10 @@ export default function PostCard({ post }: PostCardProps) {
               size="small"
               label={post.category?.name || 'Bài viết'}
               sx={{
-                bgcolor: 'rgba(11, 79, 156, 0.1)',
-                color: brandColors.blue,
-                fontWeight: 600,
+                bgcolor: 'rgba(0, 97, 79, 0.08)',
+                color: '#00614f',
+                fontWeight: 700,
+                borderRadius: 0,
               }}
             />
             {post.publishedAt && (
@@ -82,7 +96,8 @@ export default function PostCard({ post }: PostCardProps) {
           <Typography
             variant="h6"
             sx={{
-              fontSize: '1.05rem',
+              fontSize: '1.02rem',
+              fontWeight: 700,
               mb: 1,
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -97,10 +112,12 @@ export default function PostCard({ post }: PostCardProps) {
               variant="body2"
               sx={{
                 color: "text.secondary",
+                fontSize: '0.84rem',
+                lineHeight: 1.6,
                 display: '-webkit-box',
-                WebkitLineClamp: 3,
+                WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
-                overflow: 'hidden'
+                overflow: 'hidden',
               }}>
               {post.shortDescription}
             </Typography>

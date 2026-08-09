@@ -1,3 +1,4 @@
+// components/home/HomePageView.tsx
 'use client';
 
 import Link from 'next/link';
@@ -15,12 +16,11 @@ import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
-import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
 import FlightTakeoffOutlinedIcon from '@mui/icons-material/FlightTakeoffOutlined';
-import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
-import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import { useRouter } from 'next/navigation';
 import PostList from '@/components/posts/PostList';
 import PostCardModern from '@/components/posts/PostCardModern';
 import PostCardTechnical from '@/components/posts/PostCardTechnical';
@@ -28,27 +28,27 @@ import ScrollReveal from '@/components/common/ScrollReveal';
 import BannerSlider from '@/components/home/BannerSlider';
 import ContentSidebar from '@/components/layout/ContentSidebar';
 import type { MediaItem, Post } from '@/types';
-import { brandColors, brandFonts } from '@/lib/theme';
+import { brandFonts } from '@/lib/theme';
+
+const PRIMARY_COLOR = '#00614f';
+const LIGHT_BG = '#f4f6f5';
+const BORDER_COLOR = 'rgba(0, 97, 79, 0.16)';
 
 /* ──────────────────── STATIC DATA ──────────────────── */
 
+const POPULAR_DESTINATIONS = [
+  { name: 'Gửi Hàng Đi Mỹ', slug: 'gui-hang-di-my' },
+  { name: 'Gửi Hàng Đi Úc', slug: 'gui-hang-di-uc' },
+  { name: 'Gửi Hàng Đi Canada', slug: 'gui-hang-di-canada' },
+  { name: 'Gửi Hàng Đi Nhật', slug: 'gui-hang-di-nhat-ban' },
+  { name: 'Gửi Hàng Đi Hàn Quốc', slug: 'gui-hang-di-han-quoc' },
+  { name: 'Gửi Hàng Đi Đức', slug: 'gui-hang-di-duc' },
+];
+
 const defaultCarriers = [
-  { name: 'DHL Express', desc: 'Đại lý DHL — vận chuyển quốc tế hoả tốc, 220+ quốc gia.', color: '#D40511' },
-  { name: 'UPS Logistics', desc: 'Mạng lưới vận tải toàn cầu cam kết đúng hẹn và tối ưu chi phí.', color: '#301506' },
-  { name: 'FedEx Express', desc: 'Vận tải hàng không chuyên nghiệp, bảo hiểm 100% hàng hoá.', color: '#4D148C' },
-];
-
-const STATS = [
-  { value: '200+', label: 'Quốc gia & Vùng lãnh thổ', icon: <PublicOutlinedIcon sx={{ fontSize: 26 }} />, delay: '0s' },
-  { value: '50.000+', label: 'Bưu gửi thành công', icon: <AssignmentTurnedInOutlinedIcon sx={{ fontSize: 26 }} />, delay: '0.1s' },
-  { value: '15+', label: 'Năm uy tín ngành logistics', icon: <SpeedOutlinedIcon sx={{ fontSize: 26 }} />, delay: '0.2s' },
-  { value: '10.000+', label: 'Doanh nghiệp & Cá nhân tin dùng', icon: <PeopleOutlinedIcon sx={{ fontSize: 26 }} />, delay: '0.3s' },
-];
-
-const TRUST_ITEMS = [
-  { icon: <VerifiedOutlinedIcon sx={{ fontSize: 22 }} />, title: 'Bảo Hiểm 100%', desc: 'Cam kết an toàn tuyệt đối cho mọi kiện hàng', color: brandColors.primaryContainer, delay: '0s' },
-  { icon: <LocalOfferOutlinedIcon sx={{ fontSize: 22 }} />, title: 'Cước Phí Tối Ưu', desc: 'Chiết khấu lớn cho khách hàng đại lý & doanh nghiệp', color: brandColors.velocityOrange, delay: '0.1s' },
-  { icon: <SupportAgentOutlinedIcon sx={{ fontSize: 22 }} />, title: 'Hỗ Trợ 24/7', desc: 'Đội ngũ chuyên viên tư vấn tận tâm & xử lý nhanh', color: brandColors.primaryContainer, delay: '0.2s' },
+  { name: 'DHL Express', desc: 'Đại lý DHL — vận chuyển hoả tốc 220+ quốc gia.' },
+  { name: 'UPS Logistics', desc: 'Mạng lưới vận tải toàn cầu cam kết đúng hẹn.' },
+  { name: 'FedEx Express', desc: 'Vận tải hàng không, bảo hiểm 100% hàng hoá.' },
 ];
 
 /* ──────────────────── PROPS ──────────────────── */
@@ -60,11 +60,11 @@ interface HomePageViewProps {
   carrierPosts?: Post[];
   recentPosts?: Post[];
   countryPosts?: Post[];
-  carriers?: Array<{ name: string; desc: string; color?: string }>;
+  carriers?: Array<{ name: string; desc: string }>;
   banners?: MediaItem[];
 }
 
-/* ──────────────────── COMPONENT ──────────────────── */
+/* ──────────────────── MAIN COMPONENT ──────────────────── */
 
 export default function HomePageView({
   guiHangPosts = [],
@@ -76,740 +76,525 @@ export default function HomePageView({
   carriers,
   banners = [],
 }: HomePageViewProps) {
-  const guiHangList = guiHangPosts.length > 0 ? guiHangPosts : countryPosts;
-  const chuyenPhatList = chuyenPhatNhanhPosts;
-  const camNangList = camNangPosts.length > 0 ? camNangPosts : recentPosts;
+  const router = useRouter();
+
+  // 1. Initial list assignment with fallbacks
+  let initialGuiHang = guiHangPosts.length > 0 ? guiHangPosts : countryPosts;
+  let initialChuyenPhat = chuyenPhatNhanhPosts.length > 0 ? chuyenPhatNhanhPosts : recentPosts;
+  const camNangList = camNangPosts.length > 0 ? camNangPosts : (recentPosts.length > 0 ? recentPosts : countryPosts);
+
+  // If one of the lists is empty, fallback to available posts from the other list
+  if (initialChuyenPhat.length === 0 && initialGuiHang.length > 0) {
+    initialChuyenPhat = [...initialGuiHang];
+  } else if (initialGuiHang.length === 0 && initialChuyenPhat.length > 0) {
+    initialGuiHang = [...initialChuyenPhat];
+  }
+
+  // 2. Strict item balancing between Chuyen Phat & Gui Hang
+  const chuyenPhatList = [...initialChuyenPhat];
+  const guiHangList = [...initialGuiHang];
+
+  const total = chuyenPhatList.length + guiHangList.length;
+  if (total > 0) {
+    const targetForChuyenPhat = Math.ceil(total / 2);
+    if (chuyenPhatList.length < targetForChuyenPhat) {
+      const needed = targetForChuyenPhat - chuyenPhatList.length;
+      const moved = guiHangList.splice(guiHangList.length - needed, needed);
+      chuyenPhatList.push(...moved);
+    } else if (guiHangList.length < (total - targetForChuyenPhat)) {
+      const needed = (total - targetForChuyenPhat) - guiHangList.length;
+      const moved = chuyenPhatList.splice(chuyenPhatList.length - needed, needed);
+      guiHangList.push(...moved);
+    }
+  }
+
   const carrierList =
     carrierPosts.length > 0
-      ? carrierPosts.map((p, i) => ({
-          name: p.title,
-          desc: p.shortDescription || p.metaDescription || '',
-          color: defaultCarriers[i % defaultCarriers.length]?.color,
-        }))
+      ? carrierPosts.map((p) => ({
+        name: p.title,
+        desc: p.shortDescription || p.metaDescription || '',
+      }))
       : carriers && carriers.length > 0
-      ? carriers
-      : defaultCarriers;
+        ? carriers
+        : defaultCarriers;
 
   return (
-    <>
-      {/* ── 1. HERO BANNER ────────────────────────────────────────────── */}
+    <Box sx={{ bgcolor: LIGHT_BG, minHeight: '100vh' }}>
+
+      {/* ── 1. PORTAL HERO HEADER (Flat Solid #00614f) ─────────────────── */}
       {banners.length >= 1 ? (
         <BannerSlider banners={banners} />
       ) : (
-        <HeroBannerSection />
+        <PortalHeroHeader />
       )}
 
-      {/* ── 2. ANIMATED TRUCK ROAD STRIP ─────────────────────────────── */}
-      <TruckRoadStrip />
-
-      {/* ── 3. CRISP STATS COUNTER GRID ──────────────────────────────── */}
-      <Box
-        sx={{
-          bgcolor: '#ffffff',
-          borderBottom: `1px solid ${brandColors.outlineVariant}`,
-          py: 3,
-        }}
-      >
+      {/* ── 2. QUICK DESTINATIONS & SEARCH CONTROL BAR ────────────────── */}
+      <Box sx={{ bgcolor: '#ffffff', borderBottom: `1px solid ${BORDER_COLOR}`, py: 2 }}>
         <Container maxWidth="lg">
-          <Grid container spacing={2}>
-            {STATS.map((s) => (
-              <Grid key={s.label} size={{ xs: 6, md: 3 }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={2}
+            sx={{ alignItems: { xs: 'stretch', md: 'center' }, justifyContent: 'space-between' }}
+          >
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+              <FlightTakeoffOutlinedIcon sx={{ fontSize: 18, color: PRIMARY_COLOR }} />
+              <Typography sx={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a1a1a' }}>
+                Tuyến phổ biến:
+              </Typography>
+            </Stack>
+
+            <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1 }}>
+              {POPULAR_DESTINATIONS.map((dest) => (
                 <Box
-                  className="anim-fade-up"
+                  key={dest.slug}
+                  component={Link}
+                  href={`/${dest.slug}`}
                   sx={{
-                    height: '100%',
-                    p: 2.5,
-                    borderRadius: 0,
-                    bgcolor: brandColors.surfaceContainerLow,
-                    border: `1px solid ${brandColors.outlineVariant}`,
-                    borderLeft: `4px solid ${brandColors.primaryContainer}`,
-                    transition: 'all 0.25s ease',
-                    animationDelay: s.delay,
+                    px: 1.5,
+                    py: 0.5,
+                    bgcolor: LIGHT_BG,
+                    border: `1px solid ${BORDER_COLOR}`,
+                    color: '#333333',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    transition: 'all 0.15s ease',
                     '&:hover': {
-                      transform: 'translateY(-4px)',
-                      bgcolor: '#ffffff',
-                      boxShadow: '0 8px 24px rgba(13, 124, 102, 0.12)',
-                      borderLeftColor: brandColors.velocityOrange,
-                      '& .stat-icon': {
-                        transform: 'scale(1.15) rotate(-5deg)',
-                        color: brandColors.velocityOrange,
-                      },
+                      bgcolor: PRIMARY_COLOR,
+                      color: '#ffffff',
+                      borderColor: PRIMARY_COLOR,
                     },
                   }}
                 >
-                  <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', mb: 1 }}>
-                    <Box
-                      className="stat-icon"
-                      sx={{
-                        color: brandColors.primaryContainer,
-                        transition: 'transform 0.3s ease, color 0.3s ease',
-                      }}
-                    >
-                      {s.icon}
-                    </Box>
-                    <Typography
-                      sx={{
-                        fontWeight: 800,
-                        fontSize: { xs: '1.5rem', md: '1.85rem' },
-                        color: brandColors.primaryContainer,
-                        fontFamily: brandFonts.headline,
-                        lineHeight: 1,
-                      }}
-                    >
-                      {s.value}
-                    </Typography>
-                  </Stack>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      display: 'block',
-                      color: brandColors.onSurfaceVariant,
-                      fontWeight: 600,
-                      fontSize: '0.8rem',
-                    }}
-                  >
-                    {s.label}
-                  </Typography>
+                  {dest.name}
                 </Box>
-              </Grid>
-            ))}
-          </Grid>
+              ))}
+            </Stack>
+          </Stack>
         </Container>
       </Box>
 
-      {/* ── 4. CRISP TRUST CARDS BAR ─────────────────────────────────── */}
-      <Box
-        sx={{
-          bgcolor: brandColors.surfaceContainerLow,
-          borderBottom: `1px solid ${brandColors.outlineVariant}`,
-          py: 2.5,
-        }}
-      >
-        <Container maxWidth="lg">
-          <Grid container spacing={2}>
-            {TRUST_ITEMS.map((item) => (
-              <Grid key={item.title} size={{ xs: 12, md: 4 }}>
-                <Box
-                  className="anim-fade-up"
-                  sx={{
-                    height: '100%',
-                    p: 2,
-                    borderRadius: 0,
-                    bgcolor: '#ffffff',
-                    border: `1px solid ${brandColors.outlineVariant}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 2,
-                    animationDelay: item.delay,
-                    transition: 'all 0.25s ease',
-                    '&:hover': {
-                      transform: 'translateY(-3px)',
-                      borderColor: item.color,
-                      boxShadow: '0 8px 20px rgba(0,0,0,0.06)',
-                      '& .trust-icon-box': {
-                        bgcolor: item.color,
-                        color: '#ffffff',
-                      },
-                    },
-                  }}
-                >
-                  <Box
-                    className="trust-icon-box"
-                    sx={{
-                      width: 42,
-                      height: 42,
-                      borderRadius: 0,
-                      bgcolor: brandColors.surfaceContainerLow,
-                      color: item.color,
-                      border: `1px solid ${brandColors.outlineVariant}`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      transition: 'all 0.25s ease',
-                    }}
-                  >
-                    {item.icon}
-                  </Box>
-                  <Box>
-                    <Typography sx={{ fontWeight: 700, fontSize: '0.9rem', color: brandColors.onSurface }}>
-                      {item.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: brandColors.onSurfaceVariant, fontSize: '0.8rem' }}>
-                      {item.desc}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
+      {/* ── 3. MAIN CONTENT GRID WITH SIDEBAR ─────────────────────────── */}
+      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 5 } }}>
+        <Grid container spacing={{ xs: 4, md: 4 }}>
 
-      {/* ── 5. MAIN CONTENT AREA + SIDEBAR ───────────────────────────── */}
-      <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-        <Grid container spacing={4}>
+          {/* Main Content Area */}
           <Grid size={{ xs: 12, md: 8 }}>
-            <Stack spacing={{ xs: 5, md: 6 }}>
+            <Stack spacing={4}>
 
-              {/* Company Intro Card (Sharp & Technical) */}
+              {/* Company Info Banner */}
               <Box
-                className="anim-fade-up"
                 sx={{
-                  position: 'relative',
-                  p: { xs: 3, md: 4 },
-                  borderRadius: 0,
                   bgcolor: '#ffffff',
-                  border: `1px solid ${brandColors.outlineVariant}`,
-                  borderLeft: `5px solid ${brandColors.primaryContainer}`,
-                  boxShadow: '0 4px 20px rgba(17, 28, 45, 0.04)',
-                  transition: 'box-shadow 0.25s ease, border-left-color 0.25s ease',
-                  '&:hover': {
-                    boxShadow: '0 8px 30px rgba(13, 124, 102, 0.09)',
-                    borderLeftColor: brandColors.velocityOrange,
-                  },
+                  border: `1px solid ${BORDER_COLOR}`,
+                  p: 3,
+                  position: 'relative',
                 }}
               >
-                <Stack spacing={1.5}>
-                  <Box
-                    sx={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 0.75,
-                      px: 1.25,
-                      py: 0.35,
-                      borderRadius: 0,
-                      bgcolor: brandColors.surfaceContainerLow,
-                      color: brandColors.primaryContainer,
-                      fontFamily: brandFonts.labelCaps,
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      letterSpacing: '0.06em',
-                      width: 'fit-content',
-                      border: `1px solid ${brandColors.outlineVariant}`,
-                    }}
-                  >
-                    <LocationOnOutlinedIcon sx={{ fontSize: 14 }} />
-                    VỀ CHÚNG TÔI
-                  </Box>
-                  <Typography
-                    variant="h2"
-                    sx={{
-                      color: brandColors.primaryContainer,
-                      fontWeight: 700,
-                      fontSize: { xs: '1.3rem', md: '1.6rem' },
-                    }}
-                  >
-                    CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: brandColors.onSurfaceVariant,
-                      fontSize: { xs: '0.93rem', md: '0.98rem' },
-                      lineHeight: 1.8,
-                    }}
-                  >
-                    GLLOGISTICS — Chuyên vận chuyển hàng hóa đi nước ngoài và nhập hàng từ tất cả các quốc gia về Việt Nam bằng đường hàng không & đường biển. Nhận vận chuyển mỹ phẩm, dược phẩm, hàng cồng kềnh, quà tặng... với quy trình thủ tục trọn gói, chi phí tối ưu nhất.
+                <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 1 }}>
+                  <LocationOnOutlinedIcon sx={{ fontSize: 18, color: PRIMARY_COLOR }} />
+                  <Typography sx={{ fontFamily: brandFonts.labelCaps, fontWeight: 700, fontSize: '0.75rem', color: PRIMARY_COLOR, textTransform: 'uppercase' }}>
+                    Công Ty TNHH Gia Long Logistics Việt Nam
                   </Typography>
                 </Stack>
+
+                <Typography sx={{ color: '#444444', fontSize: '0.92rem', lineHeight: 1.75 }}>
+                  GLLOGISTICS — Chuyên gia vận chuyển hàng hóa quốc tế uy tín tại TP.HCM. Cung cấp dịch vụ gửi hàng đi Mỹ, Úc, Canada, Châu Âu và Châu Á với cước phí cạnh tranh, thủ tục hải quan trọn gói.
+                </Typography>
               </Box>
 
-              {/* Express Delivery Posts Section: using PostCardModern */}
-              <SectionBlock
-                overline="DỊCH VỤ NỔI BẬT"
-                overlineColor={brandColors.velocityOrange}
-                heading="Chuyển Phát Nhanh"
-                href="/chuyen-phat-nhanh"
+              {/* Combined Services Hub: 1 Unified Shared Box Container */}
+              <Box
+                sx={{
+                  bgcolor: '#ffffff',
+                  border: `1px solid ${BORDER_COLOR}`,
+                  p: { xs: 2.5, sm: 3 },
+                }}
               >
-                {chuyenPhatList.length > 0 ? (
-                  <Grid container spacing={2.5}>
-                    {chuyenPhatList.map((item, idx) => (
-                      <Grid key={item.id || item.slug} size={{ xs: 12, sm: 6 }}>
-                        <ScrollReveal animation="fadeInUp" delay={idx * 0.08}>
-                          <PostCardModern post={item} />
-                        </ScrollReveal>
-                      </Grid>
-                    ))}
-                  </Grid>
-                ) : (
-                  <EmptyNote text="Chưa có bài viết thuộc chuyên mục Chuyển phát nhanh." />
-                )}
-              </SectionBlock>
+                <Grid container spacing={3} sx={{ alignItems: 'stretch' }}>
+                  {/* Column 1: Chuyển Phát Nhanh (Primary Teal Theme #00614f - Slides in from Left) */}
+                  <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <ScrollReveal animation="fadeInLeft" sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <Box sx={{ borderBottom: `2px solid ${PRIMARY_COLOR}`, pb: 1, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Typography sx={{ fontWeight: 800, fontSize: '1.05rem', color: PRIMARY_COLOR, textTransform: 'uppercase' }}>
+                          Chuyển Phát Nhanh
+                        </Typography>
+                        <Button
+                          component={Link}
+                          href="/chuyen-phat-nhanh"
+                          endIcon={<ArrowForwardIcon className="hdr-arrow" sx={{ color: PRIMARY_COLOR, transition: 'transform 0.25s ease' }} />}
+                          size="small"
+                          sx={{
+                            color: PRIMARY_COLOR,
+                            fontWeight: 700,
+                            fontSize: '0.75rem',
+                            p: 0,
+                            '&:hover .hdr-arrow': { transform: 'translateX(4px)' },
+                          }}
+                        >
+                          Xem thêm
+                        </Button>
+                      </Box>
 
-              {/* Overseas Shipping Section: using PostCardTechnical */}
-              <SectionBlock
-                overline="CHUYÊN TUYẾN QUỐC TẾ"
-                overlineColor={brandColors.primaryContainer}
-                heading="Gửi Hàng Đi Nước Ngoài"
-                href="/gui-hang-di-nuoc-ngoai"
-              >
-                {guiHangList.length > 0 ? (
-                  <Grid container spacing={2.5}>
-                    {guiHangList.map((item, idx) => (
-                      <Grid key={item.id || item.slug} size={{ xs: 12 }}>
-                        <ScrollReveal animation="fadeInRight" delay={idx * 0.1}>
-                          <PostCardTechnical post={item} />
-                        </ScrollReveal>
-                      </Grid>
-                    ))}
-                  </Grid>
-                ) : (
-                  <EmptyNote text="Chưa có bài viết thuộc chuyên mục Gửi hàng đi nước ngoài." />
-                )}
-              </SectionBlock>
+                      <Box sx={{ flex: 1 }}>
+                        {chuyenPhatList.length > 0 ? (
+                          <Stack spacing={2}>
+                            {chuyenPhatList.map((item, idx) => (
+                              <ScrollReveal key={item.id || item.slug} animation="fadeInLeft" delay={idx * 0.08}>
+                                <PostCardTechnical post={item} accentColor={PRIMARY_COLOR} />
+                              </ScrollReveal>
+                            ))}
+                          </Stack>
+                        ) : (
+                          <EmptyNote text="Chưa có bài viết." />
+                        )}
+                      </Box>
 
-              {/* Carriers Block */}
+                      {/* Customer Free Consultation & Quick Quote Widget (Ocean Sapphire #0369a1 Animated Theme) */}
+                      <Box
+                        sx={{
+                          mt: 'auto',
+                          pt: 2.5,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            p: 2.5,
+                            bgcolor: '#0369a1',
+                            border: `1px solid #0284c7`,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1.75,
+                            position: 'relative',
+                            overflow: 'hidden',
+                            '@keyframes arrowNudge': {
+                              '0%, 100%': { transform: 'translateX(0)' },
+                              '50%': { transform: 'translateX(5px)' },
+                            },
+                            '@keyframes livePulse': {
+                              '0%, 100%': { opacity: 1, transform: 'scale(1)' },
+                              '50%': { opacity: 0.4, transform: 'scale(1.3)' },
+                            },
+                          }}
+                        >
+                          <Stack
+                            component={Link}
+                            href="/lien-he"
+                            direction="row"
+                            spacing={1.25}
+                            sx={{ alignItems: 'center', textDecoration: 'none', '&:hover .widget-title': { color: '#e0f2fe' } }}
+                          >
+                            <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+                              <SupportAgentOutlinedIcon sx={{ fontSize: 24, color: '#ffffff' }} />
+                              <Box
+                                sx={{
+                                  position: 'absolute',
+                                  top: -1,
+                                  right: -2,
+                                  width: 8,
+                                  height: 8,
+                                  borderRadius: '50%',
+                                  bgcolor: '#22c55e',
+                                  border: '1.5px solid #0369a1',
+                                  animation: 'livePulse 2s ease-in-out infinite',
+                                }}
+                              />
+                            </Box>
+                            <Typography className="widget-title" sx={{ fontWeight: 800, fontSize: '0.92rem', color: '#ffffff', textTransform: 'uppercase', transition: 'color 0.2s ease', letterSpacing: '0.02em' }}>
+                              Tư Vấn Miễn Phí &amp; Báo Giá Nhanh
+                            </Typography>
+                          </Stack>
+
+                          <Typography sx={{ fontSize: '0.84rem', color: 'rgba(255, 255, 255, 0.95)', lineHeight: 1.65 }}>
+                            Quý khách cần gửi bưu phẩm, thực phẩm hay hàng cồng kềnh đi Mỹ, Úc, Canada? Liên hệ ngay để chuyên viên GLLOGISTICS tư vấn giải pháp và báo giá cước tốt nhất sau 3 phút.
+                          </Typography>
+
+                          {/* Direct Button to /lien-he */}
+                          <Button
+                            component={Link}
+                            href="/lien-he"
+                            variant="contained"
+                            fullWidth
+                            endIcon={<ArrowForwardIcon sx={{ color: '#0369a1', animation: 'arrowNudge 1.6s ease-in-out infinite' }} />}
+                            sx={{
+                              py: 1.25,
+                              bgcolor: '#ffffff',
+                              color: '#0369a1',
+                              fontWeight: 800,
+                              fontSize: '0.82rem',
+                              borderRadius: 0,
+                              letterSpacing: '0.04em',
+                              boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
+                              transition: 'all 0.25s ease',
+                              '&:hover': { bgcolor: '#e0f2fe', color: '#075985', boxShadow: '0 8px 24px rgba(0,0,0,0.22)' },
+                            }}
+                          >
+                            TƯ VẤN CƯỚC PHÍ &amp; GỬI HÀNG NGAY
+                          </Button>
+
+                          {/* Feature Checklist with Hover Micro-Interactions */}
+                          <Stack spacing={0.85} sx={{ pt: 0.5 }}>
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              sx={{
+                                alignItems: 'center',
+                                transition: 'transform 0.2s ease',
+                                cursor: 'default',
+                                '&:hover': { transform: 'translateX(4px)' },
+                                '&:hover .check-icon': { transform: 'scale(1.3) rotate(10deg)', color: '#ffffff' },
+                              }}
+                            >
+                              <CheckCircleOutlinedIcon className="check-icon" sx={{ fontSize: 16, color: '#bae6fd', transition: 'transform 0.2s ease, color 0.2s ease' }} />
+                              <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: 'rgba(255, 255, 255, 0.95)' }}>
+                                Miễn phí đóng gói thùng carton &amp; hút chân không
+                              </Typography>
+                            </Stack>
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              sx={{
+                                alignItems: 'center',
+                                transition: 'transform 0.2s ease',
+                                cursor: 'default',
+                                '&:hover': { transform: 'translateX(4px)' },
+                                '&:hover .check-icon': { transform: 'scale(1.3) rotate(10deg)', color: '#ffffff' },
+                              }}
+                            >
+                              <CheckCircleOutlinedIcon className="check-icon" sx={{ fontSize: 16, color: '#bae6fd', transition: 'transform 0.2s ease, color 0.2s ease' }} />
+                              <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: 'rgba(255, 255, 255, 0.95)' }}>
+                                Lấy hàng tận nhà nội thành TP.HCM (30–60 phút)
+                              </Typography>
+                            </Stack>
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              sx={{
+                                alignItems: 'center',
+                                transition: 'transform 0.2s ease',
+                                cursor: 'default',
+                                '&:hover': { transform: 'translateX(4px)' },
+                                '&:hover .check-icon': { transform: 'scale(1.3) rotate(10deg)', color: '#ffffff' },
+                              }}
+                            >
+                              <CheckCircleOutlinedIcon className="check-icon" sx={{ fontSize: 16, color: '#bae6fd', transition: 'transform 0.2s ease, color 0.2s ease' }} />
+                              <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: 'rgba(255, 255, 255, 0.95)' }}>
+                                Tra cứu mã vận đơn trực tuyến real-time 24/7
+                              </Typography>
+                            </Stack>
+                          </Stack>
+                        </Box>
+                      </Box>
+                    </ScrollReveal>
+                  </Grid>
+
+                  {/* Column 2: Gửi Hàng Quốc Tế (Accent Orange Theme #c2410c - Slides in from Right) */}
+                  <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <ScrollReveal animation="fadeInRight" sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <Box sx={{ borderBottom: `2px solid #c2410c`, pb: 1, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Typography sx={{ fontWeight: 800, fontSize: '1.05rem', color: '#c2410c', textTransform: 'uppercase' }}>
+                          Gửi Hàng Quốc Tế
+                        </Typography>
+                        <Button
+                          component={Link}
+                          href="/gui-hang-di-nuoc-ngoai"
+                          endIcon={<ArrowForwardIcon className="hdr-arrow" sx={{ color: '#c2410c', transition: 'transform 0.25s ease' }} />}
+                          size="small"
+                          sx={{
+                            color: '#c2410c',
+                            fontWeight: 700,
+                            fontSize: '0.75rem',
+                            p: 0,
+                            '&:hover .hdr-arrow': { transform: 'translateX(4px)' },
+                          }}
+                        >
+                          Xem thêm
+                        </Button>
+                      </Box>
+
+                      <Box sx={{ flex: 1 }}>
+                        {guiHangList.length > 0 ? (
+                          <Stack spacing={2}>
+                            {guiHangList.map((item, idx) => (
+                              <ScrollReveal key={item.id || item.slug} animation="fadeInRight" delay={idx * 0.08}>
+                                <PostCardModern post={item} accentColor="#c2410c" />
+                              </ScrollReveal>
+                            ))}
+                          </Stack>
+                        ) : (
+                          <EmptyNote text="Chưa có bài viết." />
+                        )}
+                      </Box>
+                    </ScrollReveal>
+                  </Grid>
+                </Grid>
+              </Box>
+
+              {/* Carrier Partners Block (Unique ZoomIn Staggered Animation) */}
               <ScrollReveal animation="zoomIn">
-                <CrispCarrierBlock carriers={carrierList} />
+                <Box sx={{ bgcolor: '#ffffff', border: `1px solid ${BORDER_COLOR}`, p: 3 }}>
+                  <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: PRIMARY_COLOR, textTransform: 'uppercase', mb: 2, borderBottom: `2px solid ${PRIMARY_COLOR}`, pb: 1 }}>
+                    Đối Tác Vận Chuyển Hàng Đầu
+                  </Typography>
+
+                  <Grid container spacing={2}>
+                    {carrierList.map((c, idx) => (
+                      <Grid key={c.name} size={{ xs: 12, sm: 4 }}>
+                        <ScrollReveal animation="zoomIn" delay={idx * 0.1}>
+                          <Box
+                            sx={{
+                              p: 2,
+                              bgcolor: LIGHT_BG,
+                              border: `1px solid ${BORDER_COLOR}`,
+                              height: '100%',
+                              transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+                              '&:hover': {
+                                transform: 'translateY(-4px)',
+                                borderColor: PRIMARY_COLOR,
+                                boxShadow: '0 8px 20px rgba(0,97,79,0.12)',
+                              },
+                            }}
+                          >
+                            <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 0.75 }}>
+                              <LocalShippingOutlinedIcon sx={{ fontSize: 18, color: PRIMARY_COLOR }} />
+                              <Typography sx={{ fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>{c.name}</Typography>
+                            </Stack>
+                            <Typography sx={{ fontSize: '0.8rem', color: '#555555', lineHeight: 1.5 }}>{c.desc}</Typography>
+                          </Box>
+                        </ScrollReveal>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
               </ScrollReveal>
 
-              {/* Experience Guides Section */}
-              <ScrollReveal animation="fadeInUp">
-                <SectionBlock
-                  overline="CẨM NANG HỖ TRỢ"
-                  overlineColor={brandColors.primaryContainer}
-                  heading="Chia Sẻ Kinh Nghiệm Gửi Hàng"
-                  href="/cam-nang"
-                >
-                  <PostList
-                    posts={camNangList}
-                    emptyMessage="Chưa có bài viết cẩm nang. Hãy quay lại sau."
-                  />
-                </SectionBlock>
-              </ScrollReveal>
+              {/* Cẩm Nang Logistics */}
+              <Box>
+                <ScrollReveal animation="fadeInLeft">
+                  <Box sx={{ borderBottom: `2px solid ${PRIMARY_COLOR}`, pb: 1, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Typography sx={{ fontWeight: 800, fontSize: '1.05rem', color: PRIMARY_COLOR, textTransform: 'uppercase' }}>
+                      Cẩm Nang Kinh Nghiệm
+                    </Typography>
+                    <Button
+                      component={Link}
+                      href="/cam-nang"
+                      endIcon={<ArrowForwardIcon className="hdr-arrow" sx={{ color: PRIMARY_COLOR, transition: 'transform 0.25s ease' }} />}
+                      size="small"
+                      sx={{
+                        color: PRIMARY_COLOR,
+                        fontWeight: 700,
+                        fontSize: '0.75rem',
+                        p: 0,
+                        '&:hover .hdr-arrow': { transform: 'translateX(4px)' },
+                      }}
+                    >
+                      Tất cả cẩm nang
+                    </Button>
+                  </Box>
+                </ScrollReveal>
+
+                <PostList posts={camNangList} emptyMessage="Chưa có bài viết cẩm nang." />
+              </Box>
 
             </Stack>
           </Grid>
 
-          {/* Right Sticky Sidebar */}
+          {/* Sticky Sidebar */}
           <Grid size={{ xs: 12, md: 4 }}>
             <ContentSidebar />
           </Grid>
+
         </Grid>
       </Container>
-    </>
+    </Box>
   );
 }
 
 /* ──────────────────── SUB-COMPONENTS ──────────────────── */
 
-function HeroBannerSection() {
+function PortalHeroHeader() {
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        minHeight: { xs: 380, md: 470 },
-        display: 'flex',
-        alignItems: 'center',
-        background: `linear-gradient(135deg, ${brandColors.forestDeep} 0%, ${brandColors.primary} 45%, ${brandColors.primaryContainer} 100%)`,
-        backgroundSize: '200% 200%',
-        animation: 'bgShift 10s ease infinite',
-        color: '#ffffff',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Animated Glow Blobs */}
-      <Box
-        sx={{
-          position: 'absolute',
-          width: 500,
-          height: 500,
-          borderRadius: '50%',
-          right: { xs: '-20%', md: '2%' },
-          top: { xs: '15%', md: '-20%' },
-          background: `radial-gradient(circle, rgba(249,115,22,0.22) 0%, rgba(13,124,102,0.05) 60%, transparent 80%)`,
-          filter: 'blur(50px)',
-          animation: 'pulseGlow 7s ease-in-out infinite alternate',
-        }}
-      />
-
-      {/* Floating Plane Icon */}
-      <Box
-        sx={{
-          position: 'absolute',
-          right: { xs: '2%', md: '6%' },
-          top: { xs: '10%', md: '14%' },
-          opacity: { xs: 0.1, md: 0.16 },
-          animation: 'floatY 4s ease-in-out infinite',
-          pointerEvents: 'none',
-          display: { xs: 'none', sm: 'block' },
-        }}
-      >
-        <FlightTakeoffOutlinedIcon sx={{ fontSize: 160, color: '#ffffff' }} />
-      </Box>
-
-      {/* Spinning Globe Background Icon */}
-      <Box
-        sx={{
-          position: 'absolute',
-          left: { xs: '-10%', md: '-4%' },
-          bottom: { xs: '-10%', md: '-20%' },
-          opacity: 0.06,
-          animation: 'spinSlow 22s linear infinite',
-          pointerEvents: 'none',
-          display: { xs: 'none', md: 'block' },
-        }}
-      >
-        <PublicOutlinedIcon sx={{ fontSize: 280, color: '#ffffff' }} />
-      </Box>
-
-      <Container maxWidth="lg" sx={{ position: 'relative', py: { xs: 7, md: 9 }, zIndex: 1 }}>
-        <Stack spacing={3} sx={{ maxWidth: 700 }}>
-          {/* Live Indicator Pill Badge (Crisp 4px radius) */}
-          <Box
-            className="anim-fade-left"
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 1,
-              px: 1.75,
-              py: 0.5,
-              borderRadius: 0,
-              bgcolor: 'rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255, 255, 255, 0.22)',
-              width: 'fit-content',
-            }}
-          >
-            <Box
-              sx={{
-                width: 8,
-                height: 8,
-                borderRadius: '50%',
-                bgcolor: '#4ade80',
-                boxShadow: '0 0 10px #4ade80',
-              }}
-            />
-            <PublicOutlinedIcon sx={{ fontSize: 14, color: brandColors.velocityOrange }} />
-            <Typography
-              sx={{
-                fontFamily: brandFonts.labelCaps,
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                letterSpacing: '0.08em',
-                color: brandColors.onPrimaryContainer,
-                textTransform: 'uppercase',
-              }}
-            >
-              Giải Pháp Logistics Quốc Tế Toàn Diện
-            </Typography>
-          </Box>
-
-          {/* Heading */}
-          <Typography
-            variant="h1"
-            className="anim-fade-up"
-            sx={{
-              fontWeight: 700,
-              fontSize: { xs: '1.9rem', md: '2.9rem' },
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
-              textShadow: '0 2px 12px rgba(0,0,0,0.18)',
-            }}
-          >
-            Dịch vụ gửi hàng đi nước ngoài{' '}
-            <Box
-              component="span"
-              sx={{
-                color: brandColors.velocityOrange,
-                display: 'inline-block',
-              }}
-            >
-              uy tín
-            </Box>{' '}
-            — giá rẻ TP.HCM
-          </Typography>
-
-          <Typography
-            className="anim-fade-up-d1"
-            sx={{
-              opacity: 0.9,
-              fontSize: { xs: '1rem', md: '1.1rem' },
-              lineHeight: 1.75,
-            }}
-          >
-            GLLOGISTICS — CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM. Nhanh chóng, an toàn, chất lượng hàng đầu.
-          </Typography>
-
-          {/* Action Buttons (Sharp 0px radius) */}
-          <Stack
-            className="anim-fade-up-d2"
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={2}
-            sx={{ pt: 0.5 }}
-          >
-            <Button
-              component={Link}
-              href="/tra-cuu"
-              variant="contained"
-              color="secondary"
-              size="large"
-              startIcon={<SearchOutlinedIcon />}
-              sx={{
-                px: 3,
-                py: 1.5,
-                borderRadius: 0,
-                fontWeight: 700,
-                boxShadow: '0 8px 24px rgba(249, 115, 22, 0.38)',
-                transition: 'all 0.25s ease',
-                '&:hover': {
-                  transform: 'translateY(-3px)',
-                  boxShadow: '0 14px 32px rgba(249, 115, 22, 0.48)',
-                },
-              }}
-            >
-              Tra cứu đơn vận chuyển
-            </Button>
-            <Button
-              component={Link}
-              href="/lien-he"
-              variant="outlined"
-              size="large"
-              endIcon={<ArrowForwardIcon className="anim-arrow-bounce" />}
-              sx={{
-                px: 3,
-                py: 1.5,
-                borderRadius: 0,
-                borderColor: 'rgba(255,255,255,0.4)',
-                color: '#ffffff',
-                backdropFilter: 'blur(4px)',
-                transition: 'all 0.25s ease',
-                '&:hover': {
-                  borderColor: '#ffffff',
-                  bgcolor: 'rgba(255,255,255,0.15)',
-                  transform: 'translateY(-3px)',
-                },
-              }}
-            >
-              Liên hệ tư vấn
-            </Button>
-          </Stack>
-        </Stack>
-      </Container>
-    </Box>
-  );
-}
-
-function TruckRoadStrip() {
-  return (
-    <Box
-      sx={{
-        position: 'relative',
-        bgcolor: brandColors.forestDeep,
-        py: 1.25,
-        overflow: 'hidden',
-        borderBottom: `2px solid ${brandColors.velocityOrange}`,
-      }}
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 2,
-          background: `repeating-linear-gradient(90deg, ${brandColors.velocityOrange} 0px, ${brandColors.velocityOrange} 20px, transparent 20px, transparent 40px)`,
-        }}
-      />
+    <Box sx={{ bgcolor: PRIMARY_COLOR, color: '#ffffff', py: { xs: 4, md: 6 } }}>
       <Container maxWidth="lg">
-        <Stack direction="row" spacing={4} sx={{ alignItems: 'center', overflow: 'hidden' }}>
-          <Box
-            sx={{
-              animation: 'truckSlide 14s linear infinite',
-              '@keyframes truckSlide': {
-                '0%': { transform: 'translateX(-200px)', opacity: 0 },
-                '5%': { opacity: 1 },
-                '85%': { opacity: 1 },
-                '100%': { transform: 'translateX(120vw)', opacity: 0 },
-              },
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              flexShrink: 0,
-            }}
-          >
-            <LocalShippingOutlinedIcon sx={{ fontSize: 22, color: brandColors.velocityOrange }} />
-            <Typography
-              sx={{
-                fontFamily: brandFonts.labelCaps,
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                color: '#ffffff',
-                letterSpacing: '0.08em',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              GLLOGISTICS — GIAO HÀNG TOÀN CẦU • 200+ QUỐC GIA • AN TOÀN & ĐÚNG HẸN
-            </Typography>
-          </Box>
-        </Stack>
-      </Container>
-    </Box>
-  );
-}
+        <Grid container spacing={{ xs: 3, md: 5 }} sx={{ alignItems: 'center' }}>
+          {/* Left Text */}
+          <Grid size={{ xs: 12, md: 7 }}>
+            <Stack spacing={2}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                <PublicOutlinedIcon sx={{ fontSize: 16, color: '#ffffff' }} />
+                <Typography sx={{ fontFamily: brandFonts.labelCaps, fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                  Hệ Thống Logistics Quốc Tế
+                </Typography>
+              </Stack>
 
-function SectionBlock({
-  overline,
-  overlineColor,
-  heading,
-  href,
-  children,
-}: {
-  overline: string;
-  overlineColor: string;
-  heading: string;
-  href: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Box className="anim-fade-up">
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        sx={{ justifyContent: 'space-between', alignItems: { sm: 'flex-end' }, mb: 2.5 }}
-      >
-        <Box>
-          <Typography
-            variant="overline"
-            sx={{
-              fontFamily: brandFonts.labelCaps,
-              color: overlineColor,
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 0.75,
-            }}
-          >
-            <Box
-              component="span"
-              sx={{
-                display: 'inline-block',
-                width: 16,
-                height: 2,
-                bgcolor: overlineColor,
-              }}
-            />
-            {overline}
-          </Typography>
-          <Typography
-            variant="h2"
-            sx={{ color: brandColors.primaryContainer, fontWeight: 700, fontSize: '1.45rem', mt: 0.25 }}
-          >
-            {heading}
-          </Typography>
-        </Box>
-        <Button
-          component={Link}
-          href={href}
-          endIcon={<ArrowForwardIcon className="anim-arrow-bounce" />}
-          sx={{
-            fontWeight: 600,
-            color: brandColors.primaryContainer,
-            mt: { xs: 0.5, sm: 0 },
-            borderRadius: 0,
-            '&:hover': { bgcolor: brandColors.surfaceContainerLow },
-          }}
-        >
-          Xem tất cả
-        </Button>
-      </Stack>
-      {children}
-    </Box>
-  );
-}
+              <Typography variant="h1" sx={{ fontWeight: 800, fontSize: { xs: '1.8rem', md: '2.5rem' }, lineHeight: 1.25 }}>
+                Vận Chuyển Hàng Hóa Nhanh Chóng Toàn Cầu
+              </Typography>
 
+              <Typography sx={{ opacity: 0.9, fontSize: '0.95rem', lineHeight: 1.65 }}>
+                Đồng hành cùng cá nhân &amp; doanh nghiệp gửi hàng đi nước ngoài an toàn, hỗ trợ đóng gói trọn gói và theo dõi lộ trình minh bạch.
+              </Typography>
 
-
-function CrispCarrierBlock({ carriers }: { carriers: Array<{ name: string; desc: string; color?: string }> }) {
-  return (
-    <Box
-      className="anim-fade-up"
-      sx={{
-        position: 'relative',
-        p: { xs: 3, md: 4 },
-        borderRadius: 0,
-        background: `linear-gradient(135deg, ${brandColors.forestDeep} 0%, #043d2a 100%)`,
-        color: '#ffffff',
-        border: `1px solid ${brandColors.outlineVariant}`,
-        boxShadow: '0 12px 36px rgba(6, 78, 59, 0.22)',
-        overflow: 'hidden',
-      }}
-    >
-      <Stack spacing={3} sx={{ position: 'relative', zIndex: 1 }}>
-        <Box>
-          <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 0.5 }}>
-            <FlightTakeoffOutlinedIcon sx={{ fontSize: 18, color: brandColors.velocityOrange }} />
-            <Typography
-              variant="overline"
-              sx={{
-                fontFamily: brandFonts.labelCaps,
-                color: brandColors.velocityOrange,
-                fontWeight: 700,
-                letterSpacing: '0.09em',
-              }}
-            >
-              ĐỐI TÁC VẬN CHUYỂN
-            </Typography>
-          </Stack>
-          <Typography variant="h2" sx={{ fontWeight: 700, fontSize: { xs: '1.3rem', md: '1.6rem' } }}>
-            Hãng Chuyển Phát Nhanh Quốc Tế Uy Tín
-          </Typography>
-        </Box>
-
-        <Grid container spacing={2}>
-          {carriers.map((c, idx) => (
-            <Grid key={c.name} size={{ xs: 12, sm: 6, md: 4 }}>
-              <Box
-                sx={{
-                  p: 2.5,
-                  height: '100%',
-                  borderRadius: 0,
-                  bgcolor: 'rgba(255, 255, 255, 0.07)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  transition: 'all 0.25s ease',
-                  animationDelay: `${idx * 0.12}s`,
-                  '&:hover': {
-                    transform: 'translateY(-3px)',
-                    borderColor: brandColors.velocityOrange,
-                    boxShadow: '0 8px 22px rgba(249, 115, 22, 0.2)',
-                  },
-                }}
-              >
-                <Stack direction="row" spacing={1.25} sx={{ alignItems: 'center', mb: 1.25 }}>
-                  <Box
-                    sx={{
-                      width: 30,
-                      height: 30,
-                      borderRadius: 0,
-                      bgcolor: c.color ? `${c.color}28` : 'rgba(249,115,22,0.2)',
-                      border: `1px solid ${c.color ? `${c.color}44` : 'rgba(249,115,22,0.3)'}`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <LocalShippingOutlinedIcon sx={{ fontSize: 16, color: c.color ?? brandColors.velocityOrange }} />
+              <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', pt: 0.5, gap: 1 }}>
+                {[
+                  { icon: <VerifiedOutlinedIcon sx={{ fontSize: 16 }} />, text: 'Bảo hiểm 100%' },
+                  { icon: <LocalOfferOutlinedIcon sx={{ fontSize: 16 }} />, text: 'Cước phí tối ưu' },
+                  { icon: <SupportAgentOutlinedIcon sx={{ fontSize: 16 }} />, text: 'Tư vấn trọn gói' },
+                ].map((item) => (
+                  <Box key={item.text} sx={{ display: 'flex', alignItems: 'center', gap: 0.75, px: 1.5, py: 0.5, bgcolor: 'rgba(255, 255, 255, 0.12)', fontSize: '0.8rem', fontWeight: 600 }}>
+                    {item.icon}
+                    {item.text}
                   </Box>
-                  <Typography sx={{ fontWeight: 700, fontSize: '1rem', color: '#ffffff' }}>
-                    {c.name}
-                  </Typography>
-                </Stack>
-                <Typography variant="body2" sx={{ opacity: 0.85, lineHeight: 1.6, fontSize: '0.83rem' }}>
-                  {c.desc}
+                ))}
+              </Stack>
+            </Stack>
+          </Grid>
+
+          {/* Right Lookup Box */}
+          <Grid size={{ xs: 12, md: 5 }}>
+            <Box sx={{ bgcolor: '#ffffff', color: '#1a1a1a', border: `1px solid ${BORDER_COLOR}`, p: 3, boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}>
+              <Typography sx={{ fontWeight: 800, fontSize: '0.95rem', color: PRIMARY_COLOR, textTransform: 'uppercase', mb: 1 }}>
+                Tra Cứu Tiến Trình Đơn Vận Chuyển
+              </Typography>
+              <Typography sx={{ fontSize: '0.82rem', color: '#666666', mb: 2 }}>
+                Nhập mã vận đơn để nhận thông tin cập nhật lộ trình mới nhất.
+              </Typography>
+
+              <Box sx={{ border: `1px solid ${BORDER_COLOR}`, px: 2, py: 1.25, mb: 2, bgcolor: LIGHT_BG, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <SearchOutlinedIcon sx={{ fontSize: 18, color: '#888888' }} />
+                <Typography sx={{ fontSize: '0.85rem', color: '#888888', fontStyle: 'italic' }}>
+                  Ví dụ: GLEX123456789
                 </Typography>
               </Box>
-            </Grid>
-          ))}
+
+              <Button
+                component={Link}
+                href="/tra-cuu"
+                variant="contained"
+                fullWidth
+                endIcon={<ArrowForwardIcon />}
+                sx={{
+                  py: 1.25,
+                  borderRadius: 0,
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  bgcolor: PRIMARY_COLOR,
+                  '&:hover': { bgcolor: '#004d3e' },
+                }}
+              >
+                Tra Cứu Đơn Hàng
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
-      </Stack>
+      </Container>
     </Box>
   );
 }
 
 function EmptyNote({ text }: { text: string }) {
   return (
-    <Typography variant="body2" sx={{ color: brandColors.onSurfaceVariant, fontStyle: 'italic' }}>
+    <Typography variant="body2" sx={{ color: '#777777', fontStyle: 'italic' }}>
       {text}
     </Typography>
   );
