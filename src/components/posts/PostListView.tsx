@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Box, Grid, Pagination, PaginationItem, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 import type { Category, Post, ResolvePagination } from '@/types';
 import { brandColors } from '@/lib/theme';
 import ContentWithSidebar from '@/components/layout/ContentWithSidebar';
@@ -10,6 +10,141 @@ interface PostListViewProps {
   category: Category;
   posts: Post[];
   pagination: ResolvePagination;
+}
+
+function ServerPagination({
+  currentPage,
+  totalPages,
+  categorySlug,
+}: {
+  currentPage: number;
+  totalPages: number;
+  categorySlug: string;
+}) {
+  if (totalPages <= 1) return null;
+
+  const getHref = (p: number) => (p <= 1 ? `/${categorySlug}` : `/${categorySlug}?page=${p}`);
+
+  const pages: (number | string)[] = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (currentPage > 3) pages.push('ellipsis-start');
+
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+    for (let i = start; i <= end; i++) pages.push(i);
+
+    if (currentPage < totalPages - 2) pages.push('ellipsis-end');
+    pages.push(totalPages);
+  }
+
+  const btnSx = {
+    minWidth: 36,
+    height: 36,
+    px: 1.25,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 0,
+    fontSize: '0.85rem',
+    textDecoration: 'none',
+    border: `1px solid ${brandColors.outlineVariant}`,
+    transition: 'all 0.2s ease',
+  };
+
+  return (
+    <Stack
+      direction="row"
+      spacing={0.75}
+      sx={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', pt: 2 }}
+    >
+      {currentPage > 1 && (
+        <Box
+          component={Link}
+          href={getHref(currentPage - 1)}
+          sx={{
+            ...btnSx,
+            bgcolor: '#ffffff',
+            color: brandColors.onSurface,
+            fontWeight: 600,
+            '&:hover': {
+              bgcolor: brandColors.surfaceContainerLow,
+              borderColor: brandColors.primaryContainer,
+              color: brandColors.primaryContainer,
+            },
+          }}
+        >
+          ‹ Trước
+        </Box>
+      )}
+
+      {pages.map((p) => {
+        if (typeof p === 'string') {
+          return (
+            <Box
+              key={p}
+              sx={{
+                width: 28,
+                height: 36,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: brandColors.onSurfaceVariant,
+              }}
+            >
+              ...
+            </Box>
+          );
+        }
+
+        const isSelected = p === currentPage;
+        return (
+          <Box
+            key={p}
+            component={Link}
+            href={getHref(p)}
+            sx={{
+              ...btnSx,
+              fontWeight: isSelected ? 700 : 500,
+              bgcolor: isSelected ? brandColors.primaryContainer : '#ffffff',
+              color: isSelected ? '#ffffff' : brandColors.onSurface,
+              borderColor: isSelected ? brandColors.primaryContainer : brandColors.outlineVariant,
+              boxShadow: isSelected ? '0 2px 8px rgba(13, 124, 102, 0.25)' : 'none',
+              '&:hover': {
+                bgcolor: isSelected ? brandColors.primaryContainer : brandColors.surfaceContainerLow,
+                borderColor: brandColors.primaryContainer,
+                color: isSelected ? '#ffffff' : brandColors.primaryContainer,
+              },
+            }}
+          >
+            {p}
+          </Box>
+        );
+      })}
+
+      {currentPage < totalPages && (
+        <Box
+          component={Link}
+          href={getHref(currentPage + 1)}
+          sx={{
+            ...btnSx,
+            bgcolor: '#ffffff',
+            color: brandColors.onSurface,
+            fontWeight: 600,
+            '&:hover': {
+              bgcolor: brandColors.surfaceContainerLow,
+              borderColor: brandColors.primaryContainer,
+              color: brandColors.primaryContainer,
+            },
+          }}
+        >
+          Sau ›
+        </Box>
+      )}
+    </Stack>
+  );
 }
 
 export default function PostListView({
@@ -70,9 +205,6 @@ export default function PostListView({
               />
             </Box>
           ) : null}
-          {/* <Typography sx={{ color: 'text.secondary' }}>
-            {pagination.total} bài viết trong chuyên mục
-          </Typography> */}
         </Box>
 
         {!posts.length ? (
@@ -107,22 +239,11 @@ export default function PostListView({
               </Grid>
             )}
 
-            {pagination.totalPages > 1 && (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Pagination
-                  color="primary"
-                  page={pagination.page}
-                  count={pagination.totalPages}
-                  renderItem={(item) => (
-                    <PaginationItem
-                      component={Link}
-                      href={item.page === 1 ? `/${category.slug}` : `/${category.slug}?page=${item.page}`}
-                      {...item}
-                    />
-                  )}
-                />
-              </Box>
-            )}
+            <ServerPagination
+              currentPage={pagination.page}
+              totalPages={pagination.totalPages}
+              categorySlug={category.slug}
+            />
           </Stack>
         )}
       </Box>
