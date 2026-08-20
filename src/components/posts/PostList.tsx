@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import type { Post } from '@/types';
 import PostCard from './PostCard';
-import ScrollReveal from '../common/ScrollReveal';
 
 interface PostListProps {
   posts: Post[];
@@ -33,22 +32,22 @@ export default function PostList({
 
   return (
     <Stack spacing={4}>
-      <Grid container spacing={2.5} sx={{ alignItems: 'stretch' }}>
-        {posts.map((post, idx) => {
-          const isLeftColumn = idx % 2 === 0;
-          const rowDelay = Math.floor(idx / 2) * 0.1;
-          return (
-            <Grid key={post.id} size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column' }}>
-              <ScrollReveal
-                animation={isLeftColumn ? 'fadeInLeft' : 'fadeInRight'}
-                delay={rowDelay}
-                sx={{ height: '100%', display: 'flex', flexDirection: 'column', flex: 1 }}
-              >
-                <PostCard post={post} />
-              </ScrollReveal>
-            </Grid>
-          );
-        })}
+      <Grid container spacing={2.5}>
+        {posts.map((post, idx) => (
+          <Grid
+            key={post.id}
+            size={{ xs: 12, sm: 6 }}
+            sx={{
+              animation: `fadeInUp 0.6s ease ${idx * 0.08}s both`,
+              '@keyframes fadeInUp': {
+                from: { opacity: 0, transform: 'translateY(20px)' },
+                to: { opacity: 1, transform: 'translateY(0)' },
+              },
+            }}
+          >
+            <PostCard post={post} />
+          </Grid>
+        ))}
       </Grid>
 
       {totalPages > 1 && (

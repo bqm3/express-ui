@@ -6,45 +6,105 @@ import {
   Box,
   List,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
   Stack,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
+import EmailIcon from '@mui/icons-material/Email';
+import LinkIcon from '@mui/icons-material/Link';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
 import SupportContactButtons from '@/components/contact/SupportContactButtons';
-import type { ContactChannel, SidebarCategoryBlock } from '@/types';
-import { brandFonts } from '@/lib/theme';
+import type { ContactChannel, ContactChannelType, SidebarCategoryBlock } from '@/types';
+import { contactChannelHref } from '@/lib/contactChannel';
+import { brandColors, brandFonts } from '@/lib/theme';
 
-const PRIMARY_COLOR = '#00614f';
+const PACKAGE_ICON_PATH =
+  'M14.507 9.405l-2.507 1.45-6.961-4.027 2.511-1.435zM18.961 6.828l-2.456 1.421-6.944-4.005 1.934-1.105c0.112-0.064 0.232-0.105 0.355-0.124 0.218-0.034 0.445 0.003 0.654 0.124zM11.526 22.961c0.141 0.076 0.303 0.119 0.474 0.119 0.173 0 0.336-0.044 0.478-0.121 0.356-0.058 0.701-0.18 1.017-0.36l7.001-4.001c0.618-0.357 1.060-0.897 1.299-1.514 0.133-0.342 0.202-0.707 0.205-1.084v-8c0-0.478-0.113-0.931-0.314-1.334-0.022-0.071-0.052-0.14-0.091-0.207-0.046-0.079-0.1-0.149-0.162-0.21-0.031-0.043-0.064-0.086-0.097-0.127-0.23-0.286-0.512-0.528-0.831-0.715l-7.009-4.005c-0.61-0.352-1.3-0.465-1.954-0.364-0.363 0.057-0.715 0.179-1.037 0.363l-3.199 1.828c-0.21 0.041-0.406 0.15-0.553 0.316l-3.249 1.857c-0.383 0.221-0.699 0.513-0.941 0.85-0.060 0.060-0.114 0.13-0.159 0.207-0.039 0.068-0.070 0.138-0.092 0.21-0.040 0.080-0.076 0.163-0.108 0.246-0.132 0.343-0.201 0.708-0.204 1.078v8.007c0.001 0.71 0.248 1.363 0.664 1.878 0.23 0.286 0.512 0.528 0.831 0.715l7.009 4.005c0.324 0.187 0.67 0.307 1.022 0.362zM11 12.587v7.991l-6.495-3.711c-0.111-0.065-0.207-0.148-0.285-0.245-0.139-0.172-0.22-0.386-0.22-0.622v-7.462zM13 20.578v-7.991l7-4.049v7.462c-0.001 0.121-0.025 0.246-0.070 0.362-0.080 0.206-0.225 0.384-0.426 0.5z';
 
-function SidebarHeader({ title }: { title: string }) {
+function PackageIcon() {
   return (
     <Box
+      component="svg"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      aria-hidden
       sx={{
-        px: 2,
-        py: 1.25,
-        bgcolor: PRIMARY_COLOR,
-        color: '#ffffff',
+        width: 14,
+        height: 14,
+        display: 'block',
+        flexShrink: 0,
+        fill: brandColors.primaryContainer,
       }}
     >
-      <Typography
-        sx={{
-          fontFamily: brandFonts.labelCaps,
-          fontWeight: 700,
-          fontSize: '0.78rem',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: '#ffffff',
-        }}
-      >
-        {title}
-      </Typography>
+      <path d={PACKAGE_ICON_PATH} />
     </Box>
   );
 }
+
+function SidebarBlock({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Box
+      sx={{
+        borderRadius: '6px',
+        overflow: 'hidden',
+        border: `1px solid ${brandColors.outlineVariant}`,
+        bgcolor: '#ffffff',
+      }}
+    >
+      <Box
+        sx={{
+          px: 1.5,
+          py: 1,
+          bgcolor: brandColors.primaryContainer,
+          color: '#ffffff',
+        }}
+      >
+        <Typography
+          variant="subtitle2"
+          sx={{
+            fontFamily: brandFonts.labelCaps,
+            fontWeight: 700,
+            fontSize: '0.78rem',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+          }}
+        >
+          {title}
+        </Typography>
+      </Box>
+      <Box sx={{ p: 1 }}>{children}</Box>
+    </Box>
+  );
+}
+
+const postLinkSx = {
+  borderRadius: '4px',
+  px: 0.75,
+  py: 0.75,
+  mb: 0.25,
+  alignItems: 'center',
+  bgcolor: 'transparent',
+  borderBottom: `1px solid ${brandColors.surfaceContainerLow}`,
+  '&:last-of-type': { borderBottom: 0 },
+  transition: 'all 0.15s ease',
+  '&:hover': {
+    bgcolor: brandColors.surfaceContainerLow,
+  },
+  '&:hover .sidebar-post-title': {
+    color: brandColors.primaryContainer,
+  },
+} as const;
 
 export default function ContentSidebar() {
   const [blocks, setBlocks] = useState<SidebarCategoryBlock[]>([]);
@@ -71,141 +131,118 @@ export default function ContentSidebar() {
   }, []);
 
   return (
-    <Box
-      component="aside"
-      sx={{
-        position: { md: 'sticky' },
-        top: { md: 88 },
-        maxWidth: { md: 300 },
-        ml: { md: 'auto' },
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 2.5,
-      }}
-    >
-      {/* ── Support Block ── */}
+    <>
       <Box
+        component="aside"
         sx={{
-          border: `1px solid rgba(0, 97, 79, 0.18)`,
-          bgcolor: '#ffffff',
-          overflow: 'hidden',
+          position: { md: 'sticky' },
+          top: { md: 88 },
+          maxWidth: { md: 280 },
+          ml: { md: 'auto' },
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 1.75,
         }}
       >
-        <SidebarHeader title="Hỗ Trợ Khách Hàng" />
-
-        <Box sx={{ p: 2 }}>
-          <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', mb: 2 }}>
-            <Box
-              sx={{
-                width: 36,
-                height: 36,
-                borderRadius: '50%',
-                bgcolor: 'rgba(0, 97, 79, 0.08)',
-                color: PRIMARY_COLOR,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
-            >
-              <SupportAgentOutlinedIcon sx={{ fontSize: 20 }} />
-            </Box>
-            <Box>
-              <Typography sx={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a1a1a', lineHeight: 1.3 }}>
-                Tư vấn miễn phí
+        <SidebarBlock title="Hỗ trợ khách hàng">
+          <Stack spacing={1}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center', px: 0.5, py: 0.5 }}>
+              <SupportAgentOutlinedIcon
+                fontSize="small"
+                sx={{ color: brandColors.primaryContainer }}
+              />
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: 600, color: brandColors.onSurface, fontSize: '0.825rem' }}
+              >
+                Tư vấn 8h–18h hàng ngày
               </Typography>
-              <Typography sx={{ fontSize: '0.75rem', color: PRIMARY_COLOR, fontWeight: 600 }}>
-                8:00 – 18:00 (Hàng ngày)
-              </Typography>
-            </Box>
+            </Stack>
+            <SupportContactButtons
+              contacts={contacts}
+              variant="sidebar"
+              direction="column"
+            />
           </Stack>
+        </SidebarBlock>
 
-          <SupportContactButtons
-            contacts={contacts}
-            variant="sidebar"
-            direction="column"
-          />
-        </Box>
-      </Box>
-
-      {/* ── Category Blocks ── */}
-      {blocks.map((block) => (
-        <Box
-          key={block.slug}
-          sx={{
-            border: `1px solid rgba(0, 97, 79, 0.18)`,
-            bgcolor: '#ffffff',
-            overflow: 'hidden',
-          }}
-        >
-          <SidebarHeader title={block.name} />
-
-          <List dense disablePadding sx={{ py: 1 }}>
-            {block.posts.map((p) => (
+        {blocks.map((block) => (
+          <SidebarBlock key={block.slug} title={block.name}>
+            <List dense disablePadding>
+              {block.posts.map((p) => (
+                <ListItemButton
+                  key={p.id}
+                  component={Link}
+                  href={`/${p.slug}`}
+                  sx={postLinkSx}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 22,
+                      mr: 0.75,
+                      alignSelf: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <PackageIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={p.title}
+                    slotProps={{
+                      primary: {
+                        className: 'sidebar-post-title',
+                        variant: 'body2',
+                        sx: {
+                          fontWeight: 600,
+                          color: brandColors.onSurface,
+                          lineHeight: 1.4,
+                          fontSize: '0.835rem',
+                          transition: 'color 0.15s ease',
+                        },
+                      },
+                    }}
+                  />
+                </ListItemButton>
+              ))}
               <ListItemButton
-                key={p.id}
                 component={Link}
-                href={`/${p.slug}`}
+                href={`/${block.slug}`}
                 sx={{
-                  px: 2,
-                  py: 0.75,
-                  transition: 'background-color 0.15s ease',
+                  px: 0.75,
+                  mt: 0.5,
+                  py: 0.5,
+                  borderRadius: '4px',
+                  bgcolor: 'transparent',
                   '&:hover': {
-                    bgcolor: 'rgba(0, 97, 79, 0.05)',
-                    '& .sidebar-post-title': { color: PRIMARY_COLOR },
+                    bgcolor: brandColors.surfaceContainerLow,
+                  },
+                  '&:hover .sidebar-view-all': {
+                    color: brandColors.primary,
                   },
                 }}
               >
                 <ListItemText
-                  primary={p.title}
+                  primary="Xem tất cả →"
                   slotProps={{
                     primary: {
-                      className: 'sidebar-post-title',
+                      className: 'sidebar-view-all',
                       variant: 'body2',
                       sx: {
-                        fontWeight: 600,
-                        color: '#222222',
-                        lineHeight: 1.45,
-                        fontSize: '0.82rem',
-                        transition: 'color 0.15s ease',
+                        color: brandColors.primaryContainer,
+                        fontWeight: 700,
+                        fontSize: '0.8rem',
+                        fontFamily: brandFonts.labelCaps,
                       },
                     },
                   }}
                 />
               </ListItemButton>
-            ))}
-
-            <ListItemButton
-              component={Link}
-              href={`/${block.slug}`}
-              sx={{
-                px: 2,
-                py: 0.75,
-                mt: 0.5,
-                bgcolor: 'rgba(0, 97, 79, 0.04)',
-                borderTop: `1px solid rgba(0, 97, 79, 0.1)`,
-                '&:hover': { bgcolor: 'rgba(0, 97, 79, 0.08)' },
-              }}
-            >
-              <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
-                <ChevronRightIcon sx={{ fontSize: 16, color: PRIMARY_COLOR }} />
-                <Typography
-                  sx={{
-                    color: PRIMARY_COLOR,
-                    fontWeight: 700,
-                    fontSize: '0.78rem',
-                    fontFamily: brandFonts.labelCaps,
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  Xem tất cả
-                </Typography>
-              </Stack>
-            </ListItemButton>
-          </List>
-        </Box>
-      ))}
-    </Box>
+            </List>
+          </SidebarBlock>
+        ))}
+      </Box>
+    </>
   );
 }
-
