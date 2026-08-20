@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import type { Post } from '@/types';

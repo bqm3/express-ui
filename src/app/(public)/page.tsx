@@ -1,6 +1,8 @@
 import HomePageView from '@/components/home/HomePageView';
 import { postsApi } from '@/lib/api/postsApi';
 import { mediaApi } from '@/lib/api/mediaApi';
+import { categoriesApi } from '@/lib/api/categoriesApi';
+import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,14 +28,23 @@ async function getBanners() {
 }
 
 export default async function HomePage() {
-  const [guiHangPosts, chuyenPhatNhanhPosts, camNangPosts, carrierPosts, banners] =
-    await Promise.all([
-      getCategoryPosts('gui-hang-di-nuoc-ngoai', 4),
-      getCategoryPosts('chuyen-phat-nhanh', 4),
-      getCategoryPosts('cam-nang', 6),
-      getCategoryPosts('hang-van-chuyen', 3),
-      getBanners(),
-    ]);
+  const [
+    guiHangPosts,
+    chuyenPhatNhanhPosts,
+    camNangPosts,
+    carrierPosts,
+    banners,
+    sidebarBlocks,
+    contacts,
+  ] = await Promise.all([
+    getCategoryPosts('gui-hang-di-nuoc-ngoai', 4),
+    getCategoryPosts('chuyen-phat-nhanh', 4),
+    getCategoryPosts('cam-nang', 6),
+    getCategoryPosts('hang-van-chuyen', 3),
+    getBanners(),
+    categoriesApi.sidebar().catch(() => []),
+    contactChannelsApi.publicList().catch(() => []),
+  ]);
 
   return (
     <HomePageView
@@ -42,6 +53,8 @@ export default async function HomePage() {
       camNangPosts={camNangPosts}
       carrierPosts={carrierPosts}
       banners={banners}
+      sidebarBlocks={sidebarBlocks}
+      contacts={contacts}
     />
   );
 }

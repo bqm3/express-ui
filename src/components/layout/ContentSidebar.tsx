@@ -1,6 +1,3 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   Box,
@@ -9,18 +6,13 @@ import {
   ListItemIcon,
   ListItemText,
   Stack,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
-import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
-import EmailIcon from '@mui/icons-material/Email';
-import LinkIcon from '@mui/icons-material/Link';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
 import SupportContactButtons from '@/components/contact/SupportContactButtons';
-import type { ContactChannel, ContactChannelType, SidebarCategoryBlock } from '@/types';
-import { contactChannelHref } from '@/lib/contactChannel';
+import type { ContactChannel, SidebarCategoryBlock } from '@/types';
 import { brandColors, brandFonts } from '@/lib/theme';
 
 const PACKAGE_ICON_PATH =
@@ -106,29 +98,26 @@ const postLinkSx = {
   },
 } as const;
 
-export default function ContentSidebar() {
-  const [blocks, setBlocks] = useState<SidebarCategoryBlock[]>([]);
-  const [contacts, setContacts] = useState<ContactChannel[]>([]);
+interface ContentSidebarProps {
+  initialBlocks?: SidebarCategoryBlock[];
+  initialContacts?: ContactChannel[];
+}
 
-  useEffect(() => {
-    let cancelled = false;
+export default async function ContentSidebar({
+  initialBlocks,
+  initialContacts,
+}: ContentSidebarProps = {}) {
+  const [blocksData, contactsData] = await Promise.all([
+    initialBlocks && initialBlocks.length > 0
+      ? Promise.resolve(initialBlocks)
+      : categoriesApi.sidebar().catch(() => [] as SidebarCategoryBlock[]),
+    initialContacts && initialContacts.length > 0
+      ? Promise.resolve(initialContacts)
+      : contactChannelsApi.publicList().catch(() => [] as ContactChannel[]),
+  ]);
 
-    (async () => {
-      const [sidebarBlocks, channelList] = await Promise.all([
-        categoriesApi.sidebar().catch(() => [] as SidebarCategoryBlock[]),
-        contactChannelsApi.publicList().catch(() => [] as ContactChannel[]),
-      ]);
-
-      if (!cancelled) {
-        setBlocks(sidebarBlocks.filter((b) => b.posts.length > 0));
-        setContacts(channelList.filter((c) => c.isActive !== false));
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const blocks = blocksData.filter((b) => b.posts.length > 0);
+  const contacts = contactsData.filter((c) => c.isActive !== false);
 
   return (
     <>

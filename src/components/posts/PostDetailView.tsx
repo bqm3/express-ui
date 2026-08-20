@@ -153,21 +153,31 @@ export default function PostDetailView({
             </Typography>
             <Grid container spacing={2}>
               {related_posts.map((item) => (
-                <Grid key={item.id} size={{ xs: 12, sm: 6 }}>
+                <Grid key={item.id} size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
                   <Card
                     elevation={0}
                     sx={{
                       height: '100%',
+                      width: '100%',
                       borderRadius: 0,
                       border: `1px solid ${brandColors.border}`,
                       bgcolor: 'background.paper',
+                      display: 'flex',
+                      flexDirection: 'column',
                       '&:hover': { borderColor: brandColors.blue },
                     }}
                   >
                     <CardActionArea
                       component={Link}
                       href={`/${item.slug}`}
-                      sx={{ height: '100%', alignItems: 'stretch' }}
+                      sx={{
+                        height: '100%',
+                        flexGrow: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'stretch',
+                        justifyContent: 'flex-start',
+                      }}
                     >
                       {item.thumbnail ? (
                         <Box
@@ -186,7 +196,7 @@ export default function PostDetailView({
                           }}
                         />
                       )}
-                      <CardContent sx={{ py: 1.5 }}>
+                      <CardContent sx={{ py: 1.5, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                         {item.publishedAt && (
                           <Typography
                             variant="caption"

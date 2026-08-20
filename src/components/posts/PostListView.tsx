@@ -1,7 +1,5 @@
-'use client';
-
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Box, Grid, Pagination, Stack, Typography } from '@mui/material';
+import Link from 'next/link';
+import { Box, Grid, Pagination, PaginationItem, Stack, Typography } from '@mui/material';
 import type { Category, Post, ResolvePagination } from '@/types';
 import { brandColors } from '@/lib/theme';
 import ContentWithSidebar from '@/components/layout/ContentWithSidebar';
@@ -19,18 +17,7 @@ export default function PostListView({
   posts,
   pagination,
 }: PostListViewProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const useHorizontal = pagination.total > 6;
-
-  const onPageChange = (_: unknown, nextPage: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (nextPage <= 1) params.delete('page');
-    else params.set('page', String(nextPage));
-    const qs = params.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname);
-  };
 
   return (
     <ContentWithSidebar>
@@ -113,7 +100,7 @@ export default function PostListView({
             ) : (
               <Grid container spacing={2.5}>
                 {posts.map((post) => (
-                  <Grid key={post.id} size={{ xs: 12, sm: 6 }}>
+                  <Grid key={post.id} size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
                     <PostCard post={post} />
                   </Grid>
                 ))}
@@ -126,7 +113,13 @@ export default function PostListView({
                   color="primary"
                   page={pagination.page}
                   count={pagination.totalPages}
-                  onChange={onPageChange}
+                  renderItem={(item) => (
+                    <PaginationItem
+                      component={Link}
+                      href={item.page === 1 ? `/${category.slug}` : `/${category.slug}?page=${item.page}`}
+                      {...item}
+                    />
+                  )}
                 />
               </Box>
             )}

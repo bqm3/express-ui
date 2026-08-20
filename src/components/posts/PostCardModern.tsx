@@ -30,6 +30,7 @@ export default function PostCardModern({ post }: PostCardModernProps) {
       elevation={0}
       sx={{
         height: '100%',
+        width: '100%',
         borderRadius: 0,
         bgcolor: '#ffffff',
         border: `1px solid ${brandColors.outlineVariant}`,
@@ -59,6 +60,7 @@ export default function PostCardModern({ post }: PostCardModernProps) {
         href={`/${post.slug}`}
         sx={{
           height: '100%',
+          flexGrow: 1,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'stretch',
@@ -66,7 +68,7 @@ export default function PostCardModern({ post }: PostCardModernProps) {
         }}
       >
         {/* Top Media Header: Thumbnail or Fallback Gradient Box */}
-        <Box sx={{ position: 'relative', overflow: 'hidden', height: 180, bgcolor: brandColors.surfaceContainerLow }}>
+        <Box sx={{ position: 'relative', overflow: 'hidden', height: 180, flexShrink: 0, bgcolor: brandColors.surfaceContainerLow }}>
           {post.thumbnail ? (
             <Box
               className="card-media-img"
@@ -139,58 +141,95 @@ export default function PostCardModern({ post }: PostCardModernProps) {
             p: 2.25,
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: 'space-between',
+            width: '100%',
           }}
         >
-          {post.publishedAt && (
+          <Box sx={{ flexGrow: 1, mb: 1.5 }}>
+            {post.publishedAt && (
+              <Typography
+                variant="caption"
+                sx={{
+                  color: brandColors.onSurfaceVariant,
+                  fontSize: '0.75rem',
+                  fontWeight: 500,
+                  mb: 1,
+                  display: 'block',
+                }}
+              >
+                Đăng ngày: {dayjs(post.publishedAt).format('DD/MM/YYYY')}
+              </Typography>
+            )}
+
+            <Typography
+              className="card-title-text"
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                fontSize: '1rem',
+                lineHeight: 1.45,
+                color: brandColors.onSurface,
+                mb: 1,
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                transition: 'color 0.2s ease',
+              }}
+            >
+              {post.title}
+            </Typography>
+
+            {post.shortDescription && (
+              <Typography
+                variant="body2"
+                sx={{
+                  color: brandColors.onSurfaceVariant,
+                  fontSize: '0.85rem',
+                  lineHeight: 1.65,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                }}
+              >
+                {post.shortDescription}
+              </Typography>
+            )}
+          </Box>
+
+          {/* Action Row */}
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{
+              alignItems: 'center',
+              pt: 1.5,
+              mt: 'auto',
+              borderTop: `1px dashed ${brandColors.outlineVariant}`,
+            }}
+          >
             <Typography
               variant="caption"
               sx={{
-                color: brandColors.onSurfaceVariant,
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                mb: 1,
+                fontFamily: brandFonts.labelCaps,
+                fontWeight: 700,
+                color: brandColors.primaryContainer,
+                letterSpacing: '0.05em',
+                fontSize: '0.72rem',
               }}
             >
-              Đăng ngày: {dayjs(post.publishedAt).format('DD/MM/YYYY')}
+              XEM BÀI VIẾT
             </Typography>
-          )}
-
-          <Typography
-            className="card-title-text"
-            variant="h6"
-            sx={{
-              fontWeight: 700,
-              fontSize: '1rem',
-              lineHeight: 1.45,
-              color: brandColors.onSurface,
-              mb: 1,
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              transition: 'color 0.2s ease',
-            }}
-          >
-            {post.title}
-          </Typography>
-
-          {post.shortDescription && (
-            <Typography
-              variant="body2"
+            <ArrowForwardIcon
+              className="card-action-arrow"
               sx={{
-                color: brandColors.onSurfaceVariant,
-                fontSize: '0.85rem',
-                lineHeight: 1.65,
-                mb: 2,
-                display: '-webkit-box',
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
+                fontSize: 14,
+                color: brandColors.primaryContainer,
+                transition: 'all 0.25s ease',
               }}
-            >
-              {post.shortDescription}
-            </Typography>
-          )}
+            />
+          </Stack>
         </CardContent>
       </CardActionArea>
     </Card>

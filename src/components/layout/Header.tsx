@@ -21,7 +21,7 @@ import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import GLLogo from '@/components/common/GLLogo';
 import { brandColors, brandFonts } from '@/lib/theme';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import type { MenuCategoryItem } from '@/types';
@@ -69,20 +69,15 @@ function isNavActive(item: NavItem, pathname: string) {
   );
 }
 
-export default function Header() {
+interface HeaderProps {
+  initialMenu?: MenuCategoryItem[];
+}
+
+export default function Header({ initialMenu = [] }: HeaderProps = {}) {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [mobileExpand, setMobileExpand] = useState<string | null>(null);
-  const [menu, setMenu] = useState<MenuCategoryItem[]>([]);
-
-  useEffect(() => {
-    categoriesApi
-      .menu()
-      .then(setMenu)
-      .catch(() => setMenu([]));
-  }, []);
-
-  const navItems = useMemo(() => buildNavFromMenu(menu), [menu]);
+  const navItems = useMemo(() => buildNavFromMenu(initialMenu), [initialMenu]);
 
   return (
     <>
@@ -148,53 +143,12 @@ export default function Header() {
               component={Link}
               href="/"
               sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 1.5,
                 textDecoration: 'none',
                 color: 'inherit',
+                display: 'inline-flex',
               }}
             >
-              <Box
-                sx={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 1,
-                  bgcolor: brandColors.blue,
-                  display: 'grid',
-                  placeItems: 'center',
-                  color: '#fff',
-                }}
-              >
-                <LocalShippingIcon />
-              </Box>
-              <Box>
-                <Typography
-                  sx={{
-                    fontFamily: brandFonts.headline,
-                    fontWeight: 800,
-                    fontSize: { xs: '1.25rem', md: '1.45rem' },
-                    color: brandColors.blue,
-                    lineHeight: 1.1,
-                    letterSpacing: 0.5,
-                  }}
-                >
-                  GLLOGISTICS
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    color: brandColors.navyMuted,
-                    fontWeight: 600,
-                    letterSpacing: 0.3,
-                    textTransform: 'uppercase',
-                    fontSize: 10,
-                  }}
-                >
-                  CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM
-                </Typography>
-              </Box>
+              <GLLogo size={50} />
             </Box>
 
             <Box
@@ -417,12 +371,10 @@ export default function Header() {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
       >
-        <Box sx={{ width: 300, pt: 2 }} role="presentation">
-          <Typography
-            sx={{ px: 2, pb: 1, fontWeight: 800, color: brandColors.blue }}
-          >
-            GLLOGISTICS.NET
-          </Typography>
+        <Box sx={{ width: 300, pt: 2.5 }} role="presentation">
+          <Box sx={{ px: 2, pb: 2, borderBottom: `1px solid ${brandColors.outlineVariant}`, mb: 1 }}>
+            <GLLogo size={38} showSubtitle={false} />
+          </Box>
           <List dense>
             {navItems.map((item) => {
               const hasChildren = Boolean(item.children?.length);

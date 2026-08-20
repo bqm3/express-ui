@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import GLLogo from '@/components/common/GLLogo';
 import { brandColors, brandFonts } from '@/lib/theme';
 
 const countryLinks = [
@@ -54,17 +55,9 @@ export default function Footer() {
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 4 }}>
-            <Typography
-              sx={{
-                fontFamily: brandFonts.headline,
-                fontWeight: 800,
-                fontSize: '1.25rem',
-                color: brandColors.yellow,
-                mb: 1,
-              }}
-            >
-              GLLOGISTICS
-            </Typography>
+            <Box sx={{ mb: 2 }}>
+              <GLLogo size={42} variant="dark" showSubtitle={false} />
+            </Box>
             <Typography variant="body2" sx={{ opacity: 0.8, mb: 2, lineHeight: 1.7 }}>
               CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.
               Chuyên vận chuyển hàng hóa đi nước ngoài và nhập hàng về Việt Nam.

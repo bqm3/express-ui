@@ -77,15 +77,12 @@ function channelAccent(channel: ContactChannelType) {
   }
 }
 
-export default function ContactChannelCards() {
-  const [contacts, setContacts] = useState<ContactChannel[]>([]);
+interface ContactChannelCardsProps {
+  initialContacts?: ContactChannel[];
+}
 
-  useEffect(() => {
-    contactChannelsApi
-      .publicList()
-      .then(setContacts)
-      .catch(() => setContacts([]));
-  }, []);
+export default function ContactChannelCards({ initialContacts = [] }: ContactChannelCardsProps = {}) {
+  const contacts = initialContacts.filter((c) => c.isActive !== false);
 
   if (!contacts.length) return null;
 

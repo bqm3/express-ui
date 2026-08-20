@@ -1,8 +1,14 @@
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import type { ApiResponse } from '@/types';
 
-const baseURL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+const serverUrl =
+  process.env.API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://apiexpress.couponzas.com/api/v1';
+
+// Server-side (SSR) calls backend API directly.
+// Client-side (Browser) calls relative '/api/v1' proxy to avoid exposing backend URL.
+const baseURL = typeof window === 'undefined' ? serverUrl : '/api/v1';
 
 export const apiClient = axios.create({
   baseURL,

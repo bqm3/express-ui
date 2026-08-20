@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 import PostListView from '@/components/posts/PostListView';
 import PostDetailView from '@/components/posts/PostDetailView';
 import PostLienHe from '@/components/posts/PostLienHe';
@@ -123,12 +122,10 @@ export default async function SlugPage({ params, searchParams }: PageProps) {
   }
 
   return (
-    <Suspense fallback={null}>
-      <PostListView
-        category={resolved.category}
-        posts={resolved.posts}
-        pagination={resolved.pagination}
-      />
-    </Suspense>
+    <PostListView
+      category={resolved.category}
+      posts={resolved.posts}
+      pagination={resolved.pagination}
+    />
   );
 }

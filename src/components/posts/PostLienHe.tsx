@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material';
 import type { Category } from '@/types';
 import { brandColors } from '@/lib/theme';
 import { CONTACT_MAP_EMBED_URL } from '@/lib/site';
+import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
 import ContentWithSidebar from '@/components/layout/ContentWithSidebar';
 import ContactForm from '@/components/contact/ContactForm';
 import ContactChannelCards from '@/components/contact/ContactChannelCards';
@@ -12,10 +13,12 @@ interface PostLienHeProps {
   mapEmbedUrl?: string;
 }
 
-export default function PostLienHe({
+export default async function PostLienHe({
   category,
   mapEmbedUrl = CONTACT_MAP_EMBED_URL,
 }: PostLienHeProps) {
+  const contacts = await contactChannelsApi.publicList().catch(() => []);
+
   return (
     <ContentWithSidebar>
       <Box
@@ -47,7 +50,7 @@ export default function PostLienHe({
           ) : null}
         </Box>
 
-        <ContactChannelCards />
+        <ContactChannelCards initialContacts={contacts} />
 
         <Box
           sx={{

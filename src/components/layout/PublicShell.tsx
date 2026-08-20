@@ -4,11 +4,19 @@ import Footer from './Footer';
 import BackToTop from './BackToTop';
 import FloatingContactButtons from '@/components/contact/FloatingContactButtons';
 
+import type { ContactChannel, MenuCategoryItem } from '@/types';
+
+interface PublicShellProps {
+  children: React.ReactNode;
+  initialMenu?: MenuCategoryItem[];
+  initialContacts?: ContactChannel[];
+}
+
 export default function PublicShell({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+  initialMenu,
+  initialContacts,
+}: PublicShellProps) {
   return (
     <Box
       sx={{
@@ -17,13 +25,13 @@ export default function PublicShell({
         flexDirection: 'column',
       }}
     >
-      <Header />
+      <Header initialMenu={initialMenu} />
       <Box component="main" sx={{ flex: 1 }}>
         {children}
       </Box>
       <Footer />
       <BackToTop />
-      <FloatingContactButtons />
+      <FloatingContactButtons initialContacts={initialContacts} />
     </Box>
   );
 }

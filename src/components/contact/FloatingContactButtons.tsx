@@ -56,26 +56,8 @@ interface FloatingContactButtonsProps {
   initialContacts?: ContactChannel[];
 }
 
-export default function FloatingContactButtons({ initialContacts }: FloatingContactButtonsProps) {
-  const [contacts, setContacts] = useState<ContactChannel[]>(initialContacts || []);
-
-  useEffect(() => {
-    if (initialContacts && initialContacts.length > 0) return;
-
-    let cancelled = false;
-    contactChannelsApi
-      .publicList()
-      .then((list) => {
-        if (!cancelled) {
-          setContacts(list.filter((c) => c.isActive !== false));
-        }
-      })
-      .catch(() => {});
-
-    return () => {
-      cancelled = true;
-    };
-  }, [initialContacts]);
+export default function FloatingContactButtons({ initialContacts = [] }: FloatingContactButtonsProps) {
+  const contacts = initialContacts.filter((c) => c.isActive !== false);
 
   if (!contacts.length) return null;
 

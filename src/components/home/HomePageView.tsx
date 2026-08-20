@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import {
   Box,
@@ -27,7 +25,7 @@ import PostCardTechnical from '@/components/posts/PostCardTechnical';
 import ScrollReveal from '@/components/common/ScrollReveal';
 import BannerSlider from '@/components/home/BannerSlider';
 import ContentSidebar from '@/components/layout/ContentSidebar';
-import type { MediaItem, Post } from '@/types';
+import type { ContactChannel, MediaItem, Post, SidebarCategoryBlock } from '@/types';
 import { brandColors, brandFonts } from '@/lib/theme';
 
 /* ──────────────────── STATIC DATA ──────────────────── */
@@ -62,6 +60,8 @@ interface HomePageViewProps {
   countryPosts?: Post[];
   carriers?: Array<{ name: string; desc: string; color?: string }>;
   banners?: MediaItem[];
+  sidebarBlocks?: SidebarCategoryBlock[];
+  contacts?: ContactChannel[];
 }
 
 /* ──────────────────── COMPONENT ──────────────────── */
@@ -75,6 +75,8 @@ export default function HomePageView({
   countryPosts = [],
   carriers,
   banners = [],
+  sidebarBlocks,
+  contacts,
 }: HomePageViewProps) {
   const guiHangList = guiHangPosts.length > 0 ? guiHangPosts : countryPosts;
   const chuyenPhatList = chuyenPhatNhanhPosts;
@@ -324,8 +326,12 @@ export default function HomePageView({
                 {chuyenPhatList.length > 0 ? (
                   <Grid container spacing={2.5}>
                     {chuyenPhatList.map((item, idx) => (
-                      <Grid key={item.id || item.slug} size={{ xs: 12, sm: 6 }}>
-                        <ScrollReveal animation="fadeInUp" delay={idx * 0.08}>
+                      <Grid key={item.id || item.slug} size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+                        <ScrollReveal
+                          animation="fadeInUp"
+                          delay={idx * 0.08}
+                          sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}
+                        >
                           <PostCardModern post={item} />
                         </ScrollReveal>
                       </Grid>
@@ -383,7 +389,7 @@ export default function HomePageView({
 
           {/* Right Sticky Sidebar */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <ContentSidebar />
+            <ContentSidebar initialBlocks={sidebarBlocks} initialContacts={contacts} />
           </Grid>
         </Grid>
       </Container>
