@@ -8,6 +8,7 @@ export const brandColors = {
   surfaceBright: '#f9f9ff',
   surfaceContainerLowest: '#ffffff',
   surfaceContainerLow: '#f0f3ff',
+  surfaceLow: '#f0f3ff',
   surfaceContainer: '#e7eeff',
   surfaceContainerHigh: '#dee8ff',
   surfaceContainerHighest: '#d8e3fb',

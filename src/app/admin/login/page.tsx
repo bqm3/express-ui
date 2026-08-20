@@ -15,9 +15,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import { authApi } from '@/lib/api/authApi';
 import { brandColors } from '@/lib/theme';
+import { GLLogoIcon } from '@/components/common/GLLogo';
 
 const schema = z.object({
   username: z.string().min(1, 'Nhập tên đăng nhập'),
@@ -78,32 +78,56 @@ export default function AdminLoginPage() {
               alignItems: "center",
               mb: 3
             }}>
-            <Box
-              sx={{
-                width: 48,
-                height: 48,
-                borderRadius: 2,
-                bgcolor: brandColors.teal,
-                color: '#fff',
-                display: 'grid',
-                placeItems: 'center',
-              }}
-            >
-              <LocalShippingOutlinedIcon />
+            <GLLogoIcon size={56} />
+            <Box sx={{ textAlign: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 0.35, mb: 0.5 }}>
+                <Typography
+                  component="span"
+                  sx={{
+                    fontFamily: brandColors.primaryContainer,
+                    fontWeight: 900,
+                    fontSize: '1.5rem',
+                    color: brandColors.primaryContainer,
+                    lineHeight: 1,
+                  }}
+                >
+                  GL
+                </Typography>
+                <Typography
+                  component="span"
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: '1.5rem',
+                    color: brandColors.velocityOrange,
+                    lineHeight: 1,
+                  }}
+                >
+                  LOGISTICS
+                </Typography>
+              </Box>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: brandColors.onSurfaceVariant,
+                  display: 'block',
+                  fontWeight: 700,
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Hệ Thống Quản Trị
+              </Typography>
             </Box>
-            <Typography
-              variant="h5"
-              sx={{ fontFamily: 'var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif', fontWeight: 700 }}
-            >
-              SwiftShip Admin
-            </Typography>
             <Typography
               variant="body2"
               sx={{
-                color: "text.secondary",
-                textAlign: "center"
-              }}>
-              Đăng nhập để quản lý nội dung và yêu cầu liên hệ
+                color: 'text.secondary',
+                textAlign: 'center',
+                fontSize: '0.85rem',
+              }}
+            >
+              Đăng nhập để quản lý bài viết, danh mục và yêu cầu liên hệ
             </Typography>
           </Stack>
 

@@ -48,11 +48,11 @@ export default function PostDetailView({
                 borderRadius: 0,
               }}
             />
-            {post.publishedAt && (
+            {/* {post.publishedAt && (
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {dayjs(post.publishedAt).format('DD/MM/YYYY HH:mm')}
               </Typography>
-            )}
+            )} */}
           </Stack>
 
           <Typography
@@ -120,7 +120,7 @@ export default function PostDetailView({
               '& p': { mb: 2, lineHeight: 1.8, fontSize: '0.975rem' },
               '& h2, & h3, & h4': {
                 fontFamily: brandFonts.headline,
-                color: brandColors.primaryContainer,
+                lineHeight: 1.45,
                 mt: 3,
                 mb: 1.5,
               },

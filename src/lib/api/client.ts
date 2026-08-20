@@ -45,6 +45,17 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error: AxiosError<ApiResponse>) => {
+    if (typeof window !== 'undefined' && error.response?.status === 401) {
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_user');
+      if (
+        window.location.pathname.startsWith('/admin') &&
+        window.location.pathname !== '/admin/login'
+      ) {
+        window.location.href = '/admin/login';
+      }
+    }
+
     const raw = error.response?.data?.message;
     const message =
       (Array.isArray(raw) ? raw.join(', ') : raw) ||

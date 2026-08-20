@@ -34,15 +34,22 @@ export default async function PostLienHe({
               <Box
                 className="post-content"
                 sx={{
-                  color: 'text.primary',
-                  p: { xs: 2, md: 2.5 },
+                  color: brandColors.onSurface,
+                  p: { xs: 2.5, md: 3 },
                   borderRadius: 0,
-                  bgcolor: 'background.paper',
-                  boxShadow: '0 4px 18px rgba(27, 41, 116, 0.12)',
-                  '& .catedesc': { m: 0 },
-                  '& p': { mb: 1.5 },
-                  '& ul, & ol': { pl: 2.5, mb: 1.5 },
-                  '& img': { maxWidth: '100%', height: 'auto' },
+                  bgcolor: '#ffffff',
+                  border: `1px solid ${brandColors.outlineVariant}`,
+                  boxShadow: '0 4px 18px rgba(17, 28, 45, 0.04)',
+                  lineHeight: 1.8,
+                  '& h1, & h2, & h3, & h4, & h5, & h6': {
+                    lineHeight: 1.45,
+                    mt: 2,
+                    mb: 1.2,
+                  },
+                  '& p': { mb: 1.5, lineHeight: 1.8 },
+                  '& ul, & ol': { pl: 2.5, mb: 1.5, lineHeight: 1.75 },
+                  '& img': { maxWidth: '100%', height: 'auto', my: 1.5 },
+                  '& a': { color: brandColors.primaryContainer, textDecoration: 'underline' },
                 }}
                 dangerouslySetInnerHTML={{ __html: category.content }}
               />

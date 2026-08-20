@@ -173,3 +173,70 @@ img {
   color: #fd761a;
   font-weight: 300;
 }
+
+/* ===================== POST & CATEGORY CONTENT TYPOGRAPHY ===================== */
+.post-content {
+  line-height: 1.8;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  color: inherit;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  line-height: 1.45;
+  margin-top: 1.25em;
+  margin-bottom: 0.6em;
+  font-weight: 700;
+}
+
+.post-content p {
+  line-height: 1.8;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1em 0;
+  display: block;
+}
+
+.post-content table {
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: 1.2em 0;
+  overflow-x: auto;
+}
+
+.post-content table th,
+.post-content table td {
+  border: 1px solid #bdc9c4;
+  padding: 8px 12px;
+  line-height: 1.6;
+}
+
+.post-content ul,
+.post-content ol {
+  padding-left: 24px;
+  margin-bottom: 1em;
+  line-height: 1.75;
+}
+
+.post-content li {
+  margin-bottom: 0.4em;
+}
+
+.post-content blockquote {
+  border-left: 4px solid #f97316;
+  padding-left: 16px;
+  margin: 1.2em 0;
+  font-style: italic;
+}
+
+

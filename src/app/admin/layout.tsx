@@ -27,12 +27,12 @@ import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { authApi } from '@/lib/api/authApi';
-import { brandColors } from '@/lib/theme';
+import { brandColors, brandFonts } from '@/lib/theme';
+import { GLLogoIcon } from '@/components/common/GLLogo';
 
 const DRAWER_WIDTH = 260;
 const HEADER_HEIGHT = 64;
@@ -80,47 +80,65 @@ function getPageTitle(pathname: string) {
 
 function BrandMark() {
   return (
-    <Stack
-      direction="row"
-      spacing={1.25}
+    <Box
+      component={Link}
+      href="/admin"
       sx={{
-        alignItems: "center",
-        minWidth: 0
-      }}>
-      <Box
-        sx={{
-          width: 36,
-          height: 36,
-          flexShrink: 0,
-          borderRadius: 0,
-          bgcolor: brandColors.primaryContainer,
-          color: brandColors.onPrimary,
-          display: 'grid',
-          placeItems: 'center',
-        }}
-      >
-        <LocalShippingOutlinedIcon fontSize="small" />
-      </Box>
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1.25,
+        textDecoration: 'none',
+        color: 'inherit',
+        minWidth: 0,
+      }}
+    >
+      <GLLogoIcon size={34} />
       <Box sx={{ minWidth: 0 }}>
-        <Typography
-          noWrap
-          sx={{
-            fontWeight: 700,
-            fontSize: '0.95rem',
-            lineHeight: 1.25,
-            color: brandColors.onSurface
-          }}>
-          SwiftShip
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.25 }}>
+          <Typography
+            component="span"
+            sx={{
+              fontFamily: brandFonts.headline,
+              fontWeight: 900,
+              fontSize: '0.98rem',
+              color: brandColors.primaryContainer,
+              lineHeight: 1,
+            }}
+          >
+            GL
+          </Typography>
+          <Typography
+            component="span"
+            sx={{
+              fontFamily: brandFonts.headline,
+              fontWeight: 800,
+              fontSize: '0.98rem',
+              color: brandColors.velocityOrange,
+              lineHeight: 1,
+            }}
+          >
+            LOGISTICS
+          </Typography>
+        </Box>
         <Typography
           variant="caption"
           noWrap
-          sx={{ color: brandColors.onSurfaceVariant, display: 'block', lineHeight: 1.2 }}
+          sx={{
+            color: brandColors.onSurfaceVariant,
+            display: 'block',
+            lineHeight: 1.2,
+            fontFamily: brandFonts.labelCaps,
+            fontWeight: 700,
+            fontSize: '0.65rem',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            mt: 0.25,
+          }}
         >
-          Admin Panel
+          Quản Trị Hệ Thống
         </Typography>
       </Box>
-    </Stack>
+    </Box>
   );
 }
 
@@ -254,7 +272,7 @@ export default function AdminLayout({
                   },
                 },
                 '&:hover': {
-                  bgcolor: brandColors.surfaceLow,
+                  bgcolor: brandColors.surfaceContainerLow,
                 },
               }}
             >
@@ -298,7 +316,7 @@ export default function AdminLayout({
             color: brandColors.onSurfaceVariant,
             '&:hover': {
               borderColor: brandColors.outline,
-              bgcolor: brandColors.surfaceLow,
+              bgcolor: brandColors.surfaceContainerLow,
             },
           }}
         >
@@ -447,7 +465,7 @@ export default function AdminLayout({
                   display: { xs: 'none', sm: 'inline-flex' },
                   '&:hover': {
                     borderColor: brandColors.outline,
-                    bgcolor: brandColors.surfaceLow,
+                    bgcolor: brandColors.surfaceContainerLow,
                   },
                 }}
               >
