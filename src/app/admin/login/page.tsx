@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { authApi } from '@/lib/api/authApi';
 import { brandColors } from '@/lib/theme';
-import { GLLogoIcon } from '@/components/common/GLLogo';
+import GLLogo from '@/components/common/GLLogo';
 
 const schema = z.object({
   username: z.string().min(1, 'Nhập tên đăng nhập'),
@@ -78,33 +78,8 @@ export default function AdminLoginPage() {
               alignItems: "center",
               mb: 3
             }}>
-            <GLLogoIcon size={56} />
+            <GLLogo size={56} showSubtitle={false} />
             <Box sx={{ textAlign: 'center' }}>
-              <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 0.35, mb: 0.5 }}>
-                <Typography
-                  component="span"
-                  sx={{
-                    fontFamily: brandColors.primaryContainer,
-                    fontWeight: 900,
-                    fontSize: '1.5rem',
-                    color: brandColors.primaryContainer,
-                    lineHeight: 1,
-                  }}
-                >
-                  GL
-                </Typography>
-                <Typography
-                  component="span"
-                  sx={{
-                    fontWeight: 800,
-                    fontSize: '1.5rem',
-                    color: brandColors.velocityOrange,
-                    lineHeight: 1,
-                  }}
-                >
-                  LOGISTICS
-                </Typography>
-              </Box>
               <Typography
                 variant="caption"
                 sx={{

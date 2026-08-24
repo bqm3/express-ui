@@ -31,6 +31,11 @@ export const metadata: Metadata = {
   },
   description:
     'Dịch vụ gửi hàng đi nước ngoài uy tín - giá rẻ TP.HCM | 15 năm kinh nghiệm. CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM — GLLOGISTICS.',
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({

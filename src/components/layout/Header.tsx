@@ -22,7 +22,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import GLLogo from '@/components/common/GLLogo';
-import { brandColors, brandFonts } from '@/lib/theme';
+import { brandColors } from '@/lib/theme';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import type { MenuCategoryItem } from '@/types';
 

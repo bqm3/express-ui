@@ -32,7 +32,7 @@ import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlin
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { authApi } from '@/lib/api/authApi';
 import { brandColors, brandFonts } from '@/lib/theme';
-import { GLLogoIcon } from '@/components/common/GLLogo';
+import GLLogo from '@/components/common/GLLogo';
 
 const DRAWER_WIDTH = 260;
 const HEADER_HEIGHT = 64;
@@ -92,34 +92,8 @@ function BrandMark() {
         minWidth: 0,
       }}
     >
-      <GLLogoIcon size={34} />
       <Box sx={{ minWidth: 0 }}>
-        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.25 }}>
-          <Typography
-            component="span"
-            sx={{
-              fontFamily: brandFonts.headline,
-              fontWeight: 900,
-              fontSize: '0.98rem',
-              color: brandColors.primaryContainer,
-              lineHeight: 1,
-            }}
-          >
-            GL
-          </Typography>
-          <Typography
-            component="span"
-            sx={{
-              fontFamily: brandFonts.headline,
-              fontWeight: 800,
-              fontSize: '0.98rem',
-              color: brandColors.velocityOrange,
-              lineHeight: 1,
-            }}
-          >
-            LOGISTICS
-          </Typography>
-        </Box>
+        <GLLogo size={34} showSubtitle={false} />
         <Typography
           variant="caption"
           noWrap

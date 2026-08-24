@@ -11,7 +11,7 @@ import {
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import GLLogo from '@/components/common/GLLogo';
-import { brandColors, brandFonts } from '@/lib/theme';
+import { brandColors } from '@/lib/theme';
 
 const countryLinks = [
   'Gửi hàng đi Mỹ',
@@ -56,7 +56,7 @@ export default function Footer() {
         <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ mb: 2 }}>
-              <GLLogo size={42} variant="dark" showSubtitle={false} />
+              <GLLogo size={42} variant="dark" />
             </Box>
             <Typography variant="body2" sx={{ opacity: 0.8, mb: 2, lineHeight: 1.7 }}>
               CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.

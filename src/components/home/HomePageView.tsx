@@ -621,7 +621,7 @@ function TruckRoadStrip() {
         <Stack direction="row" spacing={4} sx={{ alignItems: 'center', overflow: 'hidden' }}>
           <Box
             sx={{
-              animation: 'truckSlide 14s linear infinite',
+              animation: 'truckSlide 20s linear infinite',
               '@keyframes truckSlide': {
                 '0%': { transform: 'translateX(-200px)', opacity: 0 },
                 '5%': { opacity: 1 },
