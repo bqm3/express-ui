@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
-import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
 import {
   contactChannelDisplay,
   contactChannelHref,

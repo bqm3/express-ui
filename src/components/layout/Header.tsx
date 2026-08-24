@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -23,7 +23,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import GLLogo from '@/components/common/GLLogo';
 import { brandColors } from '@/lib/theme';
-import { categoriesApi } from '@/lib/api/categoriesApi';
 import type { MenuCategoryItem } from '@/types';
 
 type NavChild = { label: string; href: string };

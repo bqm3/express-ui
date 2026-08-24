@@ -41,6 +41,8 @@ const quickLinks = [
 ];
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <Box
       component="footer"
@@ -158,7 +160,7 @@ export default function Footer() {
 
         <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.12)' }} />
         <Typography variant="caption" sx={{ opacity: 0.55, display: 'block', textAlign: 'center' }}>
-          Bản quyền © 2010–{new Date().getFullYear()} thuộc Gllogistics.net. Quản lý bởi CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.
+          Bản quyền © 2010–{currentYear} thuộc Gllogistics.net. Quản lý bởi CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.
         </Typography>
       </Container>
     </Box>

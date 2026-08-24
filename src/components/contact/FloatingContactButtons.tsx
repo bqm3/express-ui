@@ -1,11 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Box, Tooltip } from '@mui/material';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkIcon from '@mui/icons-material/Link';
-import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
 import type { ContactChannel, ContactChannelType } from '@/types';
 import { contactChannelHref } from '@/lib/contactChannel';
 import { brandColors } from '@/lib/theme';
