@@ -2,7 +2,6 @@
 
 import { Box, Stack, Typography } from '@mui/material';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
-// FacebookIcon replaced by PNG asset
 import EmailIcon from '@mui/icons-material/Email';
 import LinkIcon from '@mui/icons-material/Link';
 import type { ContactChannel, ContactChannelType } from '@/types';
@@ -11,6 +10,7 @@ import {
   contactChannelHref,
 } from '@/lib/contactChannel';
 import { brandColors } from '@/lib/theme';
+
 
 function channelIcon(channel: ContactChannelType) {
   const sx = { fontSize: 18 };
@@ -22,7 +22,7 @@ function channelIcon(channel: ContactChannelType) {
           src="/zalo.png"
           alt="Zalo"
           aria-hidden
-          sx={{ width: 18, height: 18, display: 'block', objectFit: 'contain', bgcolor: '#0068FF' }}
+          sx={{ width: 22, height: 22, display: 'block', objectFit: 'contain' }}
         />
       );
     case 'facebook':
@@ -40,7 +40,18 @@ function channelIcon(channel: ContactChannelType) {
     case 'other':
       return <LinkIcon sx={{ ...sx, color: brandColors.navy }} />;
     default:
-      return <PhoneInTalkIcon sx={{ ...sx, color: 'red' }} />;
+      return <PhoneInTalkIcon sx={{ ...sx, color: '#ffffff' }} />;
+  }
+}
+
+function iconBg(channel: ContactChannelType) {
+  switch (channel) {
+    case 'zalo':
+      return '#1877F2';
+    case 'phone':
+      return '#25D366';
+    default:
+      return 'transparent';
   }
 }
 
@@ -88,24 +99,18 @@ export default function SupportContactButtons({
               color: isHome ? '#fff' : brandColors.navy,
               borderRadius: 0,
               transition: 'filter 0.15s ease, background-color 0.15s ease',
-              // '&:hover': {
-              //   filter: 'brightness(0.95)',
-              //   bgcolor: isHome
-              //     ? brandColors.blueDark
-              //     : brandColors.secondaryContainer,
-              // },
             }}
           >
             <Box
               sx={{
-                width: 28,
-                height: 28,
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
                 flexShrink: 0,
                 display: 'grid',
                 placeItems: 'center',
-                // bgcolor: isHome
-                //   ? 'rgba(255,255,255,0.14)'
-                //   : 'rgba(255,255,255,0.55)',
+                bgcolor: iconBg(c.channel),
+                border: c.channel === 'zalo' ? '1px solid rgba(0,0,0,0.12)' : 'none',
               }}
             >
               {channelIcon(c.channel)}

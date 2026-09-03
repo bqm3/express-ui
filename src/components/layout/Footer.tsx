@@ -12,6 +12,7 @@ import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import GLLogo from '@/components/common/GLLogo';
 import { brandColors } from '@/lib/theme';
+import type { FooterBranch, SiteSettings } from '@/types';
 
 const countryLinks = [
   'Gửi hàng đi Mỹ',
@@ -40,8 +41,41 @@ const quickLinks = [
   { label: 'Liên hệ', href: '/lien-he' },
 ];
 
-export default function Footer() {
+interface FooterProps {
+  settings?: SiteSettings;
+}
+
+export default function Footer({ settings }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const footerHotline = settings?.footer_hotline || 'Hotline 0907.277.502';
+  const footerHotlineLink = settings?.footer_hotline_link || 'tel:0907277502';
+
+  let branches: FooterBranch[] = [];
+  try {
+    if (settings?.footer_branches) {
+      const parsed = JSON.parse(settings.footer_branches);
+      if (Array.isArray(parsed)) {
+        branches = parsed;
+      }
+    }
+  } catch {
+    branches = [];
+  }
+
+  if (!branches || branches.length === 0) {
+    branches = [
+      {
+        title: '',
+        address: 'Số 5 Nguyễn Văn Vĩnh, P.4, Q. Tân Bình, TP.HCM',
+        phone: 'ĐT: (028) 6678 1779',
+      },
+      {
+        title: 'GLLogistics Quy Nhơn — Bình Định',
+        address: '',
+        phone: 'ĐT: (056) 353 1419 — 091 442 7842',
+      },
+    ];
+  }
 
   return (
     <Box
@@ -64,26 +98,43 @@ export default function Footer() {
               CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.
               Chuyên vận chuyển hàng hóa đi nước ngoài và nhập hàng về Việt Nam.
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
-              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'flex-start' }}>
-                <PlaceOutlinedIcon sx={{ fontSize: 18, mt: 0.3, color: brandColors.yellow }} />
-                <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                  Số 5 Nguyễn Văn Vĩnh, P.4, Q. Tân Bình, TP.HCM
-                  <br />
-                  ĐT: (028) 6678 1779
-                </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'flex-start' }}>
-                <PlaceOutlinedIcon sx={{ fontSize: 18, mt: 0.3, color: brandColors.yellow }} />
-                <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                  Gllogistics Quy Nhơn — Bình Định
-                  <br />
-                  ĐT: (056) 353 1419 — 091 442 7842
-                </Typography>
-              </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              {branches.map((b, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 1,
+                    alignItems: 'flex-start',
+                  }}
+                >
+                  <PlaceOutlinedIcon
+                    sx={{ fontSize: 18, mt: 0.3, color: brandColors.yellow, flexShrink: 0 }}
+                  />
+                  <Typography variant="body2" sx={{ opacity: 0.85, lineHeight: 1.5 }}>
+                    {b.title && (
+                      <Box component="span" sx={{ fontWeight: 700, display: 'block', mb: 0.25 }}>
+                        {b.title}
+                      </Box>
+                    )}
+                    {b.address && (
+                      <Box component="span" sx={{ display: 'block' }}>
+                        {b.address}
+                      </Box>
+                    )}
+                    {b.phone && (
+                      <Box component="span" sx={{ display: 'block', opacity: 0.9 }}>
+                        {b.phone}
+                      </Box>
+                    )}
+                  </Typography>
+                </Box>
+              ))}
+
               <Box
                 component="a"
-                href="tel:0907277502"
+                href={footerHotlineLink}
                 sx={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -92,10 +143,14 @@ export default function Footer() {
                   color: brandColors.yellow,
                   fontWeight: 700,
                   pt: 0.5,
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
                 }}
               >
                 <PhoneInTalkIcon sx={{ fontSize: 18 }} />
-                Hotline 0907.277.502
+                {footerHotline}
               </Box>
             </Box>
           </Grid>
@@ -160,7 +215,7 @@ export default function Footer() {
 
         <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.12)' }} />
         <Typography variant="caption" sx={{ opacity: 0.55, display: 'block', textAlign: 'center' }}>
-          Bản quyền © 2010–{currentYear} thuộc Gllogistics.net. Quản lý bởi CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.
+          Bản quyền © 2026 thuộc Gia Long Logistics. Quản lý bởi CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM.
         </Typography>
       </Container>
     </Box>

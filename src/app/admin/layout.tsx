@@ -30,6 +30,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { authApi } from '@/lib/api/authApi';
 import { brandColors, brandFonts } from '@/lib/theme';
 import GLLogo from '@/components/common/GLLogo';
@@ -54,11 +55,11 @@ const navItems = [
     icon: <SupportAgentOutlinedIcon />,
   },
   { label: 'Liên hệ', href: '/admin/contacts', icon: <MailOutlinedIcon /> },
-  // {
-  //   label: 'Tracking logs',
-  //   href: '/admin/tracking-logs',
-  //   icon: <TimelineOutlinedIcon />,
-  // },
+  {
+    label: 'Cấu hình chung',
+    href: '/admin/settings',
+    icon: <SettingsOutlinedIcon />,
+  },
   {
     label: 'Tài khoản',
     href: '/admin/users',

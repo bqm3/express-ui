@@ -10,7 +10,7 @@ interface BannerSliderProps {
   banners: MediaItem[];
 }
 
-const SWIPE_THRESHOLD = 50;
+const SWIPE_THRESHOLD = 40;
 
 export default function BannerSlider({ banners }: BannerSliderProps) {
   const [index, setIndex] = useState(0);
@@ -67,6 +67,8 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
     }
   };
 
+  if (!count) return null;
+
   const trackOffsetPercent = count > 0 ? -((index * 100) / count) : 0;
   const width = containerRef.current?.clientWidth || 1;
   const dragPercent = dragging ? (dragX / width) * (100 / count) : 0;
@@ -89,8 +91,10 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
       sx={{
         position: 'relative',
         width: '100%',
-        minHeight: { xs: 220, sm: 320, md: 420 },
-        bgcolor: brandColors.primary,
+        height: 'auto',
+        aspectRatio: { xs: '2.4/1', sm: '2.5/1', md: '2.8/1' },
+        maxHeight: { xs: 140, sm: 260, md: 450 },
+        bgcolor: brandColors.navy,
         overflow: 'hidden',
         cursor: count > 1 ? (dragging ? 'grabbing' : 'grab') : 'default',
         userSelect: 'none',
@@ -101,10 +105,9 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
         sx={{
           display: 'flex',
           height: '100%',
-          minHeight: { xs: 220, sm: 320, md: 420 },
           width: `${count * 100}%`,
           transform: `translateX(calc(${trackOffsetPercent}% + ${dragPercent}%))`,
-          transition: dragging ? 'none' : 'transform 0.45s ease',
+          transition: dragging ? 'none' : 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)',
         }}
       >
         {banners.map((banner) => {
@@ -117,8 +120,8 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
               sx={{
                 width: '100%',
                 height: '100%',
-                minHeight: { xs: 220, sm: 320, md: 420 },
                 objectFit: 'cover',
+                objectPosition: 'center',
                 display: 'block',
                 pointerEvents: 'none',
               }}
@@ -142,7 +145,7 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
                   onClick={(e) => {
                     if (movedRef.current) e.preventDefault();
                   }}
-                  sx={{ display: 'block', height: '100%' }}
+                  sx={{ display: 'block', height: '100%', width: '100%' }}
                 >
                   {content}
                 </Box>
@@ -157,12 +160,16 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
       {count > 1 && (
         <Stack
           direction="row"
-          spacing={1}
+          spacing={{ xs: 0.75, sm: 1 }}
           sx={{
             position: 'absolute',
-            right: { xs: 12, md: 20 },
-            bottom: { xs: 12, md: 16 },
+            right: { xs: 10, sm: 16, md: 24 },
+            bottom: { xs: 8, sm: 12, md: 16 },
             zIndex: 1,
+            p: 0.5,
+            borderRadius: 2,
+            bgcolor: 'rgba(0,0,0,0.2)',
+            backdropFilter: 'blur(4px)',
           }}
         >
           {banners.map((b, i) => (
@@ -173,13 +180,17 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
               aria-label={`Slide ${i + 1}`}
               onClick={() => setIndex(i)}
               sx={{
-                width: i === index ? 24 : 10,
-                height: 10,
+                width: i === index ? { xs: 18, sm: 24 } : { xs: 6, sm: 8 },
+                height: { xs: 6, sm: 8 },
                 p: 0,
                 border: 0,
+                borderRadius: 4,
                 cursor: 'pointer',
-                bgcolor: i === index ? brandColors.gold : 'rgba(255,255,255,0.55)',
-                transition: 'width 0.2s, background-color 0.2s',
+                bgcolor: i === index ? brandColors.yellow : 'rgba(255,255,255,0.65)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  bgcolor: i === index ? brandColors.gold : '#ffffff',
+                },
               }}
             />
           ))}

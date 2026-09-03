@@ -102,7 +102,7 @@ export default function PostCardModern({ post }: PostCardModernProps) {
                   letterSpacing: '0.1em',
                 }}
               >
-                GLLOGISTICS
+                GIA LONG LOGISTICS
               </Typography>
             </Box>
           )}

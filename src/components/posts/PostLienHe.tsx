@@ -3,21 +3,28 @@ import type { Category } from '@/types';
 import { brandColors } from '@/lib/theme';
 import { CONTACT_MAP_EMBED_URL } from '@/lib/site';
 import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
+import { settingsApi } from '@/lib/api/settingsApi';
 import ContentWithSidebar from '@/components/layout/ContentWithSidebar';
 import ContactForm from '@/components/contact/ContactForm';
 import ContactChannelCards from '@/components/contact/ContactChannelCards';
 
 interface PostLienHeProps {
   category: Category;
-  /** URL embed Google Maps — mặc định CONTACT_MAP_EMBED_URL */
+  /** URL embed Google Maps — mặc định lấy từ settings hoặc CONTACT_MAP_EMBED_URL */
   mapEmbedUrl?: string;
 }
 
 export default async function PostLienHe({
   category,
-  mapEmbedUrl = CONTACT_MAP_EMBED_URL,
+  mapEmbedUrl,
 }: PostLienHeProps) {
-  const contacts = await contactChannelsApi.publicList().catch(() => []);
+  const [contacts, settings] = await Promise.all([
+    contactChannelsApi.publicList().catch(() => []),
+    settingsApi.getPublicSettings().catch(() => ({})),
+  ]);
+
+  const showMap = settings.show_google_map === 'true' || settings.show_google_map === true;
+  const embedUrl = mapEmbedUrl || settings.google_map_embed_url || CONTACT_MAP_EMBED_URL;
 
   return (
     <ContentWithSidebar>
@@ -59,31 +66,33 @@ export default async function PostLienHe({
 
         <ContactChannelCards initialContacts={contacts} />
 
-        <Box
-          sx={{
-            mb: 3,
-            border: `1px solid ${brandColors.yellow}`,
-            borderRadius: 0,
-            overflow: 'hidden',
-            bgcolor: 'background.paper',
-            boxShadow: '0 4px 18px rgba(27, 41, 116, 0.08)',
-          }}
-        >
+        {showMap && (
           <Box
-            component="iframe"
-            title="Bản đồ liên hệ Gllogistics"
-            src={mapEmbedUrl}
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
             sx={{
-              display: 'block',
-              width: '100%',
-              height: { xs: 260, md: 450 },
-              border: 0,
+              mb: 3,
+              border: `1px solid ${brandColors.yellow}`,
+              borderRadius: 0,
+              overflow: 'hidden',
+              bgcolor: 'background.paper',
+              boxShadow: '0 4px 18px rgba(27, 41, 116, 0.08)',
             }}
-          />
-        </Box>
+          >
+            <Box
+              component="iframe"
+              title="Bản đồ liên hệ Gllogistics"
+              src={embedUrl}
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              sx={{
+                display: 'block',
+                width: '100%',
+                height: { xs: 260, md: 450 },
+                border: 0,
+              }}
+            />
+          </Box>
+        )}
 
         <Box
           sx={{

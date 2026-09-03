@@ -26,11 +26,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Dịch vụ gửi hàng đi nước ngoài, Mỹ, Úc, Âu bao thuế | Gllogistics',
-    template: '%s | Gllogistics',
+    default: 'Dịch vụ gửi hàng đi nước ngoài, Mỹ, Úc, Âu bao thuế | GIA LONG LOGISTICS',
+    template: '%s | GIA LONG LOGISTICS',
   },
   description:
-    'Dịch vụ gửi hàng đi nước ngoài uy tín - giá rẻ TP.HCM | 15 năm kinh nghiệm. CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM — GLLOGISTICS.',
+    'Dịch vụ gửi hàng đi nước ngoài uy tín - giá rẻ TP.HCM | 15 năm kinh nghiệm. CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM — GIA LONG LOGISTICS.',
   icons: {
     icon: '/logo.png',
     shortcut: '/logo.png',

@@ -311,7 +311,7 @@ export default function HomePageView({
                       lineHeight: 1.8,
                     }}
                   >
-                    GLLOGISTICS — Chuyên vận chuyển hàng hóa đi nước ngoài và nhập hàng từ tất cả các quốc gia về Việt Nam bằng đường hàng không & đường biển. Nhận vận chuyển mỹ phẩm, dược phẩm, hàng cồng kềnh, quà tặng... với quy trình thủ tục trọn gói, chi phí tối ưu nhất.
+                    GIA LONG LOGISTICS — Chuyên vận chuyển hàng hóa đi nước ngoài và nhập hàng từ tất cả các quốc gia về Việt Nam bằng đường hàng không & đường biển. Nhận vận chuyển mỹ phẩm, dược phẩm, hàng cồng kềnh, quà tặng... với quy trình thủ tục trọn gói, chi phí tối ưu nhất.
                   </Typography>
                 </Stack>
               </Box>
@@ -534,7 +534,7 @@ function HeroBannerSection() {
               lineHeight: 1.75,
             }}
           >
-            GLLOGISTICS — CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM. Nhanh chóng, an toàn, chất lượng hàng đầu.
+            GIA LONG LOGISTICS — CÔNG TY TNHH GIA LONG LOGISTICS VIỆT NAM. Nhanh chóng, an toàn, chất lượng hàng đầu.
           </Typography>
 
           {/* Action Buttons (Sharp 0px radius) */}
@@ -645,7 +645,7 @@ function TruckRoadStrip() {
                 whiteSpace: 'nowrap',
               }}
             >
-              GLLOGISTICS — GIAO HÀNG TOÀN CẦU • 200+ QUỐC GIA • AN TOÀN & ĐÚNG HẸN
+              GIA LONG LOGISTICS — GIAO HÀNG TOÀN CẦU • 200+ QUỐC GIA • AN TOÀN & ĐÚNG HẸN
             </Typography>
           </Box>
         </Stack>

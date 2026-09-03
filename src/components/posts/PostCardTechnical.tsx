@@ -110,7 +110,7 @@ export default function PostCardTechnical({ post }: PostCardTechnicalProps) {
                   letterSpacing: '0.08em',
                 }}
               >
-                GLLOGISTICS
+                GIA LONG LOGISTICS
               </Typography>
             </Box>
           )}

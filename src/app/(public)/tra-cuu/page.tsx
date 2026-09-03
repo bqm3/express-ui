@@ -6,7 +6,7 @@ import { brandColors } from '@/lib/theme';
 export const metadata: Metadata = {
   title: 'Tra cứu vận đơn',
   description:
-    'Tra cứu vận đơn DHL, FedEx, UPS tức thì với SwiftShip Express.',
+    'Tra cứu vận đơn DHL, FedEx, UPS tức thì với Gia Long Logistics.',
 };
 
 export default function TraCuuPage() {

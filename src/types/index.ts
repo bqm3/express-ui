@@ -373,4 +373,23 @@ export interface ChangePasswordDto {
   newPassword: string;
 }
 
+export interface FooterBranch {
+  id?: string;
+  title?: string;
+  address?: string;
+  phone?: string;
+}
+
+export interface SiteSettings {
+  header_title?: string;
+  header_hotline?: string;
+  header_hotline_link?: string;
+  footer_hotline?: string;
+  footer_hotline_link?: string;
+  footer_branches?: string;
+  show_google_map?: string | boolean;
+  google_map_embed_url?: string;
+  [key: string]: unknown;
+}
+
 

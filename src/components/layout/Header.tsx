@@ -23,7 +23,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import GLLogo from '@/components/common/GLLogo';
 import { brandColors } from '@/lib/theme';
-import type { MenuCategoryItem } from '@/types';
+import type { MenuCategoryItem, SiteSettings } from '@/types';
 
 type NavChild = { label: string; href: string };
 type NavItem = {
@@ -70,13 +70,20 @@ function isNavActive(item: NavItem, pathname: string) {
 
 interface HeaderProps {
   initialMenu?: MenuCategoryItem[];
+  settings?: SiteSettings;
 }
 
-export default function Header({ initialMenu = [] }: HeaderProps = {}) {
+export default function Header({ initialMenu = [], settings }: HeaderProps = {}) {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [mobileExpand, setMobileExpand] = useState<string | null>(null);
   const navItems = useMemo(() => buildNavFromMenu(initialMenu), [initialMenu]);
+
+  const headerTitle =
+    settings?.header_title ||
+    'Dịch vụ gửi hàng đi nước ngoài uy tín — giá rẻ TP.HCM | 15 năm kinh nghiệm';
+  const headerHotline = settings?.header_hotline || 'Hotline 0907.277.502';
+  const headerHotlineLink = settings?.header_hotline_link || 'tel:0907277502';
 
   return (
     <>
@@ -89,107 +96,111 @@ export default function Header({ initialMenu = [] }: HeaderProps = {}) {
             fontSize: 13,
           }}
         >
-        <Container maxWidth="lg">
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              variant="body2"
-              sx={{ opacity: 0.9, display: { xs: 'none', sm: 'block' } }}
-            >
-              Dịch vụ gửi hàng đi nước ngoài uy tín — giá rẻ TP.HCM | 15 năm kinh
-              nghiệm
-            </Typography>
+          <Container maxWidth="lg">
             <Box
-              component="a"
-              href="tel:0907277502"
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
+                justifyContent: 'space-between',
                 alignItems: 'center',
-                gap: 0.75,
-                ml: 'auto',
-                color: brandColors.yellow,
-                fontWeight: 700,
               }}
-            >
-              <PhoneInTalkIcon sx={{ fontSize: 18 }} />
-              Hotline 0907.277.502
-            </Box>
-          </Box>
-        </Container>
-      </Box>
-      <Box
-        sx={{ bgcolor: '#fff', borderBottom: `1px solid ${brandColors.border}` }}
-      >
-        <Container maxWidth="lg">
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', md: 'row' },
-              alignItems: { md: 'center' },
-              justifyContent: 'space-between',
-              gap: 2,
-              py: 1.5,
-            }}
-          >
-            <Box
-              component={Link}
-              href="/"
-              sx={{
-                textDecoration: 'none',
-                color: 'inherit',
-                display: 'inline-flex',
-              }}
-            >
-              <GLLogo size={50} />
-            </Box>
-
-            <Box
-              sx={{ display: { xs: 'none', md: 'block' }, textAlign: 'center' }}
             >
               <Typography
+                variant="body2"
+                sx={{ opacity: 0.9, display: { xs: 'none', sm: 'block' } }}
+              >
+                {headerTitle}
+              </Typography>
+              <Box
+                component="a"
+                href={headerHotlineLink}
                 sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 0.75,
+                  ml: 'auto',
+                  color: brandColors.yellow,
                   fontWeight: 700,
-                  color: brandColors.blue,
-                  fontSize: 13,
-                  letterSpacing: 0.8,
-                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
                 }}
               >
-                World Wide Express
-              </Typography>
-              <Typography
-                variant="caption"
-                sx={{ color: 'text.secondary' }}
-              >
-                Nhanh chóng — An toàn — Chất lượng
-              </Typography>
+                <PhoneInTalkIcon sx={{ fontSize: 18 }} />
+                {headerHotline}
+              </Box>
             </Box>
-
-            <Button
-              component={Link}
-              href="/tra-cuu"
-              variant="contained"
-              color="secondary"
-              startIcon={<SearchIcon />}
+          </Container>
+        </Box>
+        <Box
+          sx={{ bgcolor: '#fff', borderBottom: `1px solid ${brandColors.border}` }}
+        >
+          <Container maxWidth="lg">
+            <Box
               sx={{
-                px: 2.5,
-                py: 1,
-                fontWeight: 800,
-                alignSelf: { xs: 'stretch', md: 'center' },
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                alignItems: { md: 'center' },
+                justifyContent: 'space-between',
+                gap: 2,
+                py: 1.5,
               }}
             >
-              Tra cứu đơn vận chuyển
-            </Button>
-          </Box>
-        </Container>
-      </Box>
+              <Box
+                component={Link}
+                href="/"
+                sx={{
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  display: 'inline-flex',
+                }}
+              >
+                <GLLogo size={50} />
+              </Box>
+
+              <Box
+                sx={{ display: { xs: 'none', md: 'block' }, textAlign: 'center' }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 700,
+                    color: brandColors.blue,
+                    fontSize: 13,
+                    letterSpacing: 0.8,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  World Wide Express
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{ color: 'text.secondary' }}
+                >
+                  Nhanh chóng — An toàn — Chất lượng
+                </Typography>
+              </Box>
+
+              <Button
+                component={Link}
+                href="/tra-cuu"
+                variant="contained"
+                color="secondary"
+                startIcon={<SearchIcon />}
+                sx={{
+                  px: 2.5,
+                  py: 1,
+                  fontWeight: 800,
+                  alignSelf: { xs: 'stretch', md: 'center' },
+                  display: { xs: 'none', md: 'inline-flex' },
+                }}
+              >
+                Tra cứu đơn vận chuyển
+              </Button>
+            </Box>
+          </Container>
+        </Box>
       </Box>
 
       <AppBar

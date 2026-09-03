@@ -13,50 +13,48 @@ import {
 import { brandColors } from '@/lib/theme';
 import type { ContactChannel, ContactChannelType } from '@/types';
 
-function ZaloIcon({ size = 22 }: { size?: number }) {
+
+function ZaloIcon({ size = 28 }: { size?: number }) {
   return (
     <Box
-      component="svg"
-      viewBox="0 0 48 48"
-      sx={{ width: size, height: size, display: 'block' }}
+      component="img"
+      src="/zalo.png"
+      alt="Zalo"
+      sx={{ width: size, height: size, display: 'block', objectFit: 'contain' }}
       aria-hidden
-    >
-      <rect width="48" height="48" rx="10" fill="#0068FF" />
-      <text
-        x="24"
-        y="31"
-        textAnchor="middle"
-        fill="#fff"
-        fontSize="16"
-        fontWeight="800"
-        fontFamily="Arial, sans-serif"
-      >
-        Zalo
-      </text>
-    </Box>
+    />
   );
 }
 
 function channelIcon(channel: ContactChannelType) {
   switch (channel) {
     case 'zalo':
-      return <ZaloIcon />;
+      return <ZaloIcon size={28} />;
     case 'facebook':
       return (
-        <FacebookOutlinedIcon sx={{ fontSize: 28, color: '#1877F2' }} />
+        <FacebookOutlinedIcon sx={{ fontSize: 26, color: '#1877F2' }} />
       );
     case 'email':
       return (
-        <EmailOutlinedIcon sx={{ fontSize: 28, color: brandColors.blue }} />
+        <EmailOutlinedIcon sx={{ fontSize: 26, color: brandColors.blue }} />
       );
     case 'other':
       return (
-        <LinkOutlinedIcon sx={{ fontSize: 28, color: brandColors.navy }} />
+        <LinkOutlinedIcon sx={{ fontSize: 26, color: brandColors.navy }} />
       );
     default:
-      return (
-        <PhoneInTalkIcon sx={{ fontSize: 28, color: brandColors.yellowDark }} />
-      );
+      return <PhoneInTalkIcon sx={{ fontSize: 22, color: '#ffffff' }} />;
+  }
+}
+
+function channelIconBg(channel: ContactChannelType) {
+  switch (channel) {
+    case 'zalo':
+      return '#1877F2';
+    case 'phone':
+      return '#25D366';
+    default:
+      return 'rgba(0,0,0,0.04)';
   }
 }
 
@@ -64,6 +62,8 @@ function channelAccent(channel: ContactChannelType) {
   switch (channel) {
     case 'zalo':
       return '#0068FF';
+    case 'phone':
+      return '#25D366';
     case 'facebook':
       return '#1877F2';
     case 'email':
@@ -71,7 +71,7 @@ function channelAccent(channel: ContactChannelType) {
     case 'other':
       return brandColors.navy;
     default:
-      return brandColors.yellow;
+      return '#25D366';
   }
 }
 
@@ -79,7 +79,9 @@ interface ContactChannelCardsProps {
   initialContacts?: ContactChannel[];
 }
 
-export default function ContactChannelCards({ initialContacts = [] }: ContactChannelCardsProps = {}) {
+export default function ContactChannelCards({
+  initialContacts = [],
+}: ContactChannelCardsProps = {}) {
   const contacts = initialContacts.filter((c) => c.isActive !== false);
 
   if (!contacts.length) return null;
@@ -103,7 +105,9 @@ export default function ContactChannelCards({ initialContacts = [] }: ContactCha
             component="a"
             href={contactChannelHref(c)}
             target={
-              c.channel === 'phone' || c.channel === 'email' ? undefined : '_blank'
+              c.channel === 'phone' || c.channel === 'email'
+                ? undefined
+                : '_blank'
             }
             rel={
               c.channel === 'phone' || c.channel === 'email'
@@ -133,11 +137,19 @@ export default function ContactChannelCards({ initialContacts = [] }: ContactCha
               sx={{
                 width: 44,
                 height: 44,
+                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
-                bgcolor: 'rgba(0,0,0,0.03)',
+                bgcolor: channelIconBg(c.channel),
+                border: c.channel === 'zalo' ? '1px solid rgba(0,0,0,0.12)' : 'none',
+                boxShadow:
+                  c.channel === 'phone'
+                    ? '0 2px 8px rgba(37,211,102,0.35)'
+                    : c.channel === 'zalo'
+                      ? '0 2px 8px rgba(0,0,0,0.1)'
+                      : 'none',
               }}
             >
               {channelIcon(c.channel)}

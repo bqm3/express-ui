@@ -128,15 +128,15 @@ export default function ContactForm({ sourcePage }: ContactFormProps) {
           >
             {isSubmitting ? 'Đang gửi...' : 'Gửi yêu cầu'}
           </Button>
-          <Typography
+          {/* <Typography
             variant="caption"
             sx={{
               color: "text.secondary",
               display: "block",
               mt: 1
             }}>
-            Thông tin của bạn được bảo mật theo chính sách SwiftShip Express.
-          </Typography>
+            Thông tin của bạn được bảo mật theo chính sách Gia Long Logistics.
+          </Typography> */}
         </Box>
       </Stack>
     </Box>
