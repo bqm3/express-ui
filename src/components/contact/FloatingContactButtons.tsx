@@ -119,10 +119,10 @@ export default function FloatingContactButtons({
                   : `0 4px 16px ${bg}66`,
                 cursor: 'pointer',
                 textDecoration: 'none',
-                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
                 animation:
                   c.channel === 'phone' || c.channel === 'zalo'
-                    ? `pulseIcon 2.5s ease-in-out ${idx * 0.3}s infinite`
+                    ? `pulseIcon 1.0s ease-in-out ${idx * 0.15}s infinite`
                     : 'none',
                 '@keyframes pulseIcon': {
                   '0%, 100%': {
@@ -132,17 +132,17 @@ export default function FloatingContactButtons({
                       : `0 4px 16px ${bg}66`,
                   },
                   '50%': {
-                    transform: 'scale(1.08)',
+                    transform: 'scale(1.30)',
                     boxShadow: isZalo
-                      ? '0 6px 22px rgba(0,0,0,0.25), 0 0 0 6px rgba(0,104,255,0.15)'
-                      : `0 6px 22px ${bg}99, 0 0 0 6px ${bg}22`,
+                      ? '0 10px 30px rgba(0,0,0,0.32), 0 0 0 12px rgba(24,119,242,0.25)'
+                      : `0 10px 30px ${bg}cc, 0 0 0 12px ${bg}44`,
                   },
                 },
                 '&:hover': {
-                  transform: 'scale(1.12) translateY(-2px)',
+                  transform: 'scale(1.35) translateY(-4px)',
                   boxShadow: isZalo
-                    ? '0 8px 24px rgba(0,0,0,0.22)'
-                    : `0 8px 24px ${bg}aa`,
+                    ? '0 12px 32px rgba(0,0,0,0.35)'
+                    : `0 12px 32px ${bg}dd`,
                 },
               }}
             >

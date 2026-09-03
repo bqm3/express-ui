@@ -10,7 +10,6 @@ import {
   Button,
   Stack,
   TextField,
-  Typography,
 } from '@mui/material';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import { contactApi } from '@/lib/api/contactApi';

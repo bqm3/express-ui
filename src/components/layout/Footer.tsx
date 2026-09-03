@@ -46,7 +46,6 @@ interface FooterProps {
 }
 
 export default function Footer({ settings }: FooterProps) {
-  const currentYear = new Date().getFullYear();
   const footerHotline = settings?.footer_hotline || 'Hotline 0907.277.502';
   const footerHotlineLink = settings?.footer_hotline_link || 'tel:0907277502';
 
