@@ -120,12 +120,20 @@ export default function ContactForm({ sourcePage }: ContactFormProps) {
     setError(null);
     setSuccess(false);
     try {
+      const fullName = values.fullName?.trim() || undefined;
+      const phone = values.phone?.trim() || undefined;
+      const email = values.email?.trim() || undefined;
+      const subject = values.subject?.trim() || 'Yêu cầu tư vấn gửi hàng';
+      const message =
+        values.message?.trim() ||
+        'Khách hàng để lại thông tin yêu cầu tư vấn chuyển phát trên website.';
+
       await contactApi.create({
-        fullName: values.fullName?.trim() || undefined,
-        phone: values.phone?.trim() || undefined,
-        email: values.email?.trim() || undefined,
-        subject: values.subject?.trim() || undefined,
-        message: values.message?.trim() || undefined,
+        fullName,
+        phone,
+        email,
+        subject,
+        message,
         sourcePage:
           sourcePage ||
           (typeof window !== 'undefined' ? window.location.pathname : undefined),
@@ -151,37 +159,27 @@ export default function ContactForm({ sourcePage }: ContactFormProps) {
           </Alert>
         )}
 
-        {/* Required info notice */}
-        <Box sx={{ bgcolor: brandColors.offWhite, p: 2, border: `1px dashed ${brandColors.border}` }}>
-          <Stack direction="row" spacing={1} sx={{ mb: 1.5, alignItems: 'center' }}>
-            <InfoOutlinedIcon sx={{ fontSize: 18, color: brandColors.primaryContainer }} />
-            <Typography variant="body2" sx={{ fontWeight: 600, color: brandColors.navy }}>
-              Thông tin liên hệ (bắt buộc nhập ít nhất 1 trong 2: Họ tên hoặc Số điện thoại)
-            </Typography>
-          </Stack>
-
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              label="Họ và tên (*)"
-              fullWidth
-              placeholder="VD: Nguyễn Văn A"
-              {...register('fullName')}
-              error={!!errors.fullName}
-              helperText={errors.fullName?.message}
-            />
-            <TextField
-              label="Số điện thoại (*)"
-              fullWidth
-              placeholder="VD: 0901234567"
-              {...register('phone')}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
-            />
-          </Stack>
-        </Box>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <TextField
+            label="Họ và tên"
+            fullWidth
+            placeholder="VD: Nguyễn Văn A"
+            {...register('fullName')}
+            error={!!errors.fullName}
+            helperText={errors.fullName?.message}
+          />
+          <TextField
+            label="Số điện thoại"
+            fullWidth
+            placeholder="VD: 0901234567"
+            {...register('phone')}
+            error={!!errors.phone}
+            helperText={errors.phone?.message}
+          />
+        </Stack>
 
         <TextField
-          label="Email (tùy chọn)"
+          label="Email"
           type="email"
           fullWidth
           placeholder="VD: email@example.com"
@@ -191,7 +189,7 @@ export default function ContactForm({ sourcePage }: ContactFormProps) {
         />
 
         <TextField
-          label="Tiêu đề (tùy chọn)"
+          label="Tiêu đề"
           fullWidth
           placeholder="VD: Tư vấn gửi hàng đi Mỹ / Báo giá chuyển phát nhanh"
           {...register('subject')}
@@ -200,11 +198,11 @@ export default function ContactForm({ sourcePage }: ContactFormProps) {
         />
 
         <TextField
-          label="Nội dung yêu cầu (tùy chọn)"
+          label="Nội dung"
           fullWidth
           multiline
           minRows={3}
-          placeholder="Vui lòng mô tả nhu cầu gửi hàng của bạn (loại hàng hóa, cân nặng ước tính, địa chỉ nhận...)"
+          placeholder="Mô tả nhu cầu gửi hàng của bạn (loại hàng hóa, cân nặng ước tính, địa chỉ nhận...)"
           {...register('message')}
           error={!!errors.message}
           helperText={errors.message?.message}
