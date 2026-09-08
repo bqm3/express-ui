@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { User, UpdateUserDto, ChangePasswordDto } from '@/types/user';
+import { User, UpdateUserDto, ChangePasswordDto } from '@/types';
 import { usersApi } from '@/lib/api/usersApi';
 import { authApi } from '@/lib/api/authApi';
 import { useSnackbar } from '@/hooks/useSnackbar';
@@ -76,7 +76,7 @@ export default function ProfilePage() {
       if (session) {
         authApi.setSession({
           accessToken: authApi.getToken() || '',
-          user: { ...session, fullName: data.fullName },
+          user: { ...session, fullName: data.fullName || session.fullName },
         });
       }
     } catch (err: unknown) {

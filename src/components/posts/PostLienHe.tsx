@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import type { Category } from '@/types';
+import type { Category, SiteSettings } from '@/types';
 import { brandColors } from '@/lib/theme';
 import { CONTACT_MAP_EMBED_URL } from '@/lib/site';
 import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
@@ -20,7 +20,7 @@ export default async function PostLienHe({
 }: PostLienHeProps) {
   const [contacts, settings] = await Promise.all([
     contactChannelsApi.publicList().catch(() => []),
-    settingsApi.getPublicSettings().catch(() => ({})),
+    settingsApi.getPublicSettings().catch((): SiteSettings => ({})),
   ]);
 
   const showMap = settings.show_google_map === 'true' || settings.show_google_map === true;

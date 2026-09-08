@@ -177,11 +177,11 @@ export type UpdatePostPayload = Partial<CreatePostPayload>;
 
 export interface ContactRequest {
   id: number;
-  fullName: string;
-  phone: string;
-  email: string;
-  subject: string;
-  message: string;
+  fullName: string | null;
+  phone: string | null;
+  email: string | null;
+  subject: string | null;
+  message: string | null;
   sourcePage: string | null;
   status: ContactStatus;
   assignedTo: number | null;
@@ -191,13 +191,44 @@ export interface ContactRequest {
 }
 
 export interface CreateContactPayload {
-  fullName: string;
-  phone: string;
-  email: string;
-  subject: string;
-  message: string;
+  fullName?: string;
+  phone?: string;
+  email?: string;
+  subject?: string;
+  message?: string;
   sourcePage?: string;
   recaptchaToken?: string;
+}
+
+export interface TelegramUpdateItem {
+  update_id: number;
+  message?: {
+    message_id: number;
+    from?: {
+      id: number;
+      is_bot: boolean;
+      first_name?: string;
+      last_name?: string;
+      username?: string;
+    };
+    chat?: {
+      id: number;
+      first_name?: string;
+      last_name?: string;
+      username?: string;
+      title?: string;
+      type: string;
+    };
+    date: number;
+    text?: string;
+  };
+  my_chat_member?: {
+    chat?: {
+      id: number;
+      title?: string;
+      type: string;
+    };
+  };
 }
 
 export interface UpdateContactPayload {
@@ -389,6 +420,9 @@ export interface SiteSettings {
   footer_branches?: string;
   show_google_map?: string | boolean;
   google_map_embed_url?: string;
+  telegram_bot_token?: string;
+  telegram_chat_id?: string;
+  telegram_notification_enabled?: string | boolean;
   [key: string]: unknown;
 }
 

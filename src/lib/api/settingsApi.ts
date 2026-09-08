@@ -25,4 +25,18 @@ export const settingsApi = {
       .put<SiteSettings>('/settings', { settings })
       .then((res) => res.data);
   },
+
+  getTelegramUpdates(botToken?: string) {
+    return apiClient
+      .get<any[]>('/settings/telegram/updates', {
+        params: botToken ? { botToken } : {},
+      })
+      .then((res) => res.data);
+  },
+
+  sendTestTelegram(payload: { botToken?: string; chatId: string }) {
+    return apiClient
+      .post<{ success: boolean; results: any[] }>('/settings/telegram/test', payload)
+      .then((res) => res.data);
+  },
 };

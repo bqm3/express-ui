@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import {
+  Alert,
   Box,
   Button,
   Card,
   CardContent,
   CardHeader,
+  Chip,
   CircularProgress,
   Divider,
   FormControlLabel,
@@ -24,6 +26,9 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import SendIcon from '@mui/icons-material/Send';
+import SearchIcon from '@mui/icons-material/Search';
 import { settingsApi } from '@/lib/api/settingsApi';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { brandColors } from '@/lib/theme';
@@ -44,6 +49,18 @@ export default function AdminSettingsPage() {
   const [googleMapEmbedUrl, setGoogleMapEmbedUrl] = useState('');
   const [branches, setBranches] = useState<FooterBranch[]>([]);
 
+  // Telegram fields & state
+  const [telegramBotToken, setTelegramBotToken] = useState(
+    '8982469312:AAGxmU48_ou-Ws6fav0O6G6t2gD_Fr0nglI',
+  );
+  const [telegramChatId, setTelegramChatId] = useState('');
+  const [telegramEnabled, setTelegramEnabled] = useState(true);
+  const [testingTelegram, setTestingTelegram] = useState(false);
+  const [fetchingUpdates, setFetchingUpdates] = useState(false);
+  const [detectedChats, setDetectedChats] = useState<
+    { id: number | string; name: string; type: string }[]
+  >([]);
+
   const loadSettings = async () => {
     setLoading(true);
     try {
@@ -63,6 +80,13 @@ export default function AdminSettingsPage() {
       setFooterHotlineLink(map.footer_hotline_link ?? 'tel:0907277502');
       setShowGoogleMap(map.show_google_map === 'true');
       setGoogleMapEmbedUrl(map.google_map_embed_url ?? '');
+
+      setTelegramBotToken(
+        map.telegram_bot_token ??
+          '8982469312:AAGxmU48_ou-Ws6fav0O6G6t2gD_Fr0nglI',
+      );
+      setTelegramChatId(map.telegram_chat_id ?? '');
+      setTelegramEnabled(map.telegram_notification_enabled !== 'false');
 
       let parsedBranches: FooterBranch[] = [];
       try {
@@ -146,14 +170,85 @@ export default function AdminSettingsPage() {
         footer_branches: JSON.stringify(validBranches),
         show_google_map: showGoogleMap ? 'true' : 'false',
         google_map_embed_url: googleMapEmbedUrl.trim(),
+        telegram_bot_token: telegramBotToken.trim(),
+        telegram_chat_id: telegramChatId.trim(),
+        telegram_notification_enabled: telegramEnabled ? 'true' : 'false',
       });
-      snackbar.success('Đã lưu cấu hình hệ thống!');
+      snackbar.success('Đã lưu cấu hình hệ thống & thông báo Telegram!');
     } catch (err) {
       snackbar.error(
         err instanceof Error ? err.message : 'Lưu cấu hình thất bại',
       );
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleTestTelegram = async () => {
+    if (!telegramChatId.trim()) {
+      snackbar.error('Vui lòng nhập Telegram Chat ID trước khi kiểm tra');
+      return;
+    }
+    setTestingTelegram(true);
+    try {
+      await settingsApi.sendTestTelegram({
+        botToken: telegramBotToken.trim() || undefined,
+        chatId: telegramChatId.trim(),
+      });
+      snackbar.success('Đã gửi tin nhắn thử nghiệm thành công! Vui lòng kiểm tra Telegram.');
+    } catch (err) {
+      snackbar.error(
+        err instanceof Error ? err.message : 'Gửi tin nhắn Telegram thử nghiệm thất bại',
+      );
+    } finally {
+      setTestingTelegram(false);
+    }
+  };
+
+  const handleFetchUpdates = async () => {
+    setFetchingUpdates(true);
+    try {
+      const updates = await settingsApi.getTelegramUpdates(
+        telegramBotToken.trim() || undefined,
+      );
+
+      if (!Array.isArray(updates) || !updates.length) {
+        snackbar.info(
+          'Chưa có tin nhắn mới gửi tới Bot. Vui lòng mở Telegram, tìm bot và nhấn /start hoặc gửi 1 tin nhắn, sau đó bấm lại nút này.',
+        );
+        return;
+      }
+
+      const foundMap = new Map<number | string, { id: number | string; name: string; type: string }>();
+      for (const item of updates) {
+        const chat = item.message?.chat || item.my_chat_member?.chat;
+        if (chat && chat.id) {
+          const name = chat.title || [chat.first_name, chat.last_name].filter(Boolean).join(' ') || chat.username || `Chat #${chat.id}`;
+          foundMap.set(chat.id, {
+            id: chat.id,
+            name: `${name} (${chat.type})`,
+            type: chat.type,
+          });
+        }
+      }
+
+      const list = Array.from(foundMap.values());
+      setDetectedChats(list);
+
+      if (list.length === 1 && !telegramChatId.trim()) {
+        setTelegramChatId(String(list[0].id));
+        snackbar.success(`Đã tự động điền Chat ID: ${list[0].id} (${list[0].name})`);
+      } else if (list.length > 0) {
+        snackbar.success(`Tìm thấy ${list.length} cuộc hội thoại từ Telegram!`);
+      } else {
+        snackbar.info('Không tìm thấy cuộc hội thoại nào.');
+      }
+    } catch (err) {
+      snackbar.error(
+        err instanceof Error ? err.message : 'Không thể lấy dữ liệu từ Telegram',
+      );
+    } finally {
+      setFetchingUpdates(false);
     }
   };
 
@@ -287,7 +382,7 @@ export default function AdminSettingsPage() {
                         mb: 1.5,
                       }}
                     >
-                      <Stack direction="row" spacing={1} alignItems="center">
+                      <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                         <PlaceOutlinedIcon sx={{ color: brandColors.navy, fontSize: 20 }} />
                         <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
                           Địa chỉ / Chi nhánh #{idx + 1}
@@ -421,6 +516,156 @@ export default function AdminSettingsPage() {
                   placeholder="https://www.google.com/maps/embed?pb=..."
                   helperText="Link iframe từ Google Maps Embed"
                 />
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Telegram Notification Settings */}
+        <Grid size={{ xs: 12 }}>
+          <Card
+            variant="outlined"
+            sx={{
+              borderRadius: 0,
+              border: `1px solid ${brandColors.primaryContainer}`,
+              boxShadow: '0 4px 18px rgba(27, 41, 116, 0.06)',
+            }}
+          >
+            <CardHeader
+              avatar={<TelegramIcon sx={{ color: '#229ED9', fontSize: 32 }} />}
+              title={
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 700, color: brandColors.navy }}>
+                    Cấu hình Thông báo Telegram
+                  </Typography>
+                  <Chip
+                    size="small"
+                    label={telegramEnabled ? 'Đang hoạt động' : 'Tạm tắt'}
+                    color={telegramEnabled ? 'success' : 'default'}
+                    sx={{ fontWeight: 600 }}
+                  />
+                </Box>
+              }
+              subheader="Tự động bắn thông báo tức thời về Telegram mỗi khi có khách gửi yêu cầu tại trang Liên hệ"
+            />
+            <Divider />
+            <CardContent>
+              <Stack spacing={2.5}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={telegramEnabled}
+                      onChange={(e) => setTelegramEnabled(e.target.checked)}
+                      color="primary"
+                    />
+                  }
+                  label={
+                    <Typography sx={{ fontWeight: 600 }}>
+                      Bật gửi thông báo về Telegram khi có khách gửi liên hệ mới
+                    </Typography>
+                  }
+                />
+
+                <TextField
+                  label="Telegram Bot API Token"
+                  fullWidth
+                  value={telegramBotToken}
+                  onChange={(e) => setTelegramBotToken(e.target.value)}
+                  placeholder="8982469312:AAGxmU48_ou-Ws6fav0O6G6t2gD_Fr0nglI"
+                  helperText="Token của Telegram Bot quản trị (mặc định: 8982469312:AAGxmU48_ou-Ws6fav0O6G6t2gD_Fr0nglI)"
+                />
+
+                <Grid container spacing={2} sx={{ alignItems: 'flex-start' }}>
+                  <Grid size={{ xs: 12, md: 8 }}>
+                    <TextField
+                      label="Telegram Chat ID (Người nhận hoặc Nhóm)"
+                      fullWidth
+                      value={telegramChatId}
+                      onChange={(e) => setTelegramChatId(e.target.value)}
+                      placeholder="VD: 123456789 hoặc -1001234567890 (có thể nhập nhiều ID cách nhau bằng dấu phẩy)"
+                      helperText="Nhập Chat ID của bạn hoặc nhóm. Có thể dùng nút 'Lấy Chat ID từ Bot' bên cạnh để tự động nhận diện."
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 4 }}>
+                    <Stack direction="row" spacing={1} sx={{ pt: { xs: 0, md: 0.5 } }}>
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        startIcon={
+                          fetchingUpdates ? (
+                            <CircularProgress size={16} />
+                          ) : (
+                            <SearchIcon />
+                          )
+                        }
+                        onClick={handleFetchUpdates}
+                        disabled={fetchingUpdates}
+                        sx={{ py: 1.25 }}
+                      >
+                        {fetchingUpdates ? 'Đang tìm...' : 'Lấy Chat ID từ Bot'}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        fullWidth
+                        startIcon={
+                          testingTelegram ? (
+                            <CircularProgress size={16} color="inherit" />
+                          ) : (
+                            <SendIcon />
+                          )
+                        }
+                        onClick={handleTestTelegram}
+                        disabled={testingTelegram || !telegramChatId.trim()}
+                        sx={{ py: 1.25 }}
+                      >
+                        {testingTelegram ? 'Đang gửi...' : 'Test gửi'}
+                      </Button>
+                    </Stack>
+                  </Grid>
+                </Grid>
+
+                {detectedChats.length > 0 && (
+                  <Paper
+                    variant="outlined"
+                    sx={{
+                      p: 2,
+                      bgcolor: '#F0F7FF',
+                      borderColor: '#B9D5FF',
+                    }}
+                  >
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, color: '#0052CC' }}>
+                      Các cuộc hội thoại gần đây gửi tới Bot:
+                    </Typography>
+                    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }} useFlexGap>
+                      {detectedChats.map((c) => (
+                        <Chip
+                          key={c.id}
+                          label={`${c.name} (ID: ${c.id})`}
+                          clickable
+                          color={telegramChatId === String(c.id) ? 'primary' : 'default'}
+                          onClick={() => {
+                            setTelegramChatId(String(c.id));
+                            snackbar.info(`Đã chọn Chat ID: ${c.id}`);
+                          }}
+                          sx={{ my: 0.5 }}
+                        />
+                      ))}
+                    </Stack>
+                  </Paper>
+                )}
+
+                <Alert severity="info" sx={{ borderRadius: 0 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    📌 Hướng dẫn cài đặt nhận thông báo Telegram:
+                  </Typography>
+                  <Typography variant="body2" component="div">
+                    1. Mở ứng dụng Telegram, tìm kiếm bot <b>@express_buupham24h_bot</b>.<br />
+                    2. Nhấn <b>/start</b> hoặc gửi bất kỳ tin nhắn nào cho bot (hoặc thêm bot vào nhóm chat của bạn).<br />
+                    3. Bấm nút <b>"Lấy Chat ID từ Bot"</b> ở trên để hệ thống tự nhận diện Chat ID, hoặc điền trực tiếp Chat ID.<br />
+                    4. Bấm <b>"Test gửi"</b> để kiểm tra nhận tin nhắn, sau đó bấm <b>"Lưu thay đổi"</b> ở góc trên.
+                  </Typography>
+                </Alert>
               </Stack>
             </CardContent>
           </Card>
