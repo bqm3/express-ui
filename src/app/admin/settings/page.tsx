@@ -662,8 +662,8 @@ export default function AdminSettingsPage() {
                   <Typography variant="body2" component="div">
                     1. Mở ứng dụng Telegram, tìm kiếm bot <b>@express_buupham24h_bot</b>.<br />
                     2. Nhấn <b>/start</b> hoặc gửi bất kỳ tin nhắn nào cho bot (hoặc thêm bot vào nhóm chat của bạn).<br />
-                    3. Bấm nút <b>"Lấy Chat ID từ Bot"</b> ở trên để hệ thống tự nhận diện Chat ID, hoặc điền trực tiếp Chat ID.<br />
-                    4. Bấm <b>"Test gửi"</b> để kiểm tra nhận tin nhắn, sau đó bấm <b>"Lưu thay đổi"</b> ở góc trên.
+                    3. Bấm nút <b>&quot;Lấy Chat ID từ Bot&quot;</b> ở trên để hệ thống tự nhận diện Chat ID, hoặc điền trực tiếp Chat ID.<br />
+                    4. Bấm <b>&quot;Test gửi&quot;</b> để kiểm tra nhận tin nhắn, sau đó bấm <b>&quot;Lưu thay đổi&quot;</b> ở góc trên.
                   </Typography>
                 </Alert>
               </Stack>

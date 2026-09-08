@@ -1,5 +1,5 @@
 import apiClient from './client';
-import type { SiteSettings } from '@/types';
+import type { SiteSettings, TelegramUpdateItem } from '@/types';
 
 export interface AdminSettingItem {
   key: string;
@@ -28,7 +28,7 @@ export const settingsApi = {
 
   getTelegramUpdates(botToken?: string) {
     return apiClient
-      .get<any[]>('/settings/telegram/updates', {
+      .get<TelegramUpdateItem[]>('/settings/telegram/updates', {
         params: botToken ? { botToken } : {},
       })
       .then((res) => res.data);
@@ -36,7 +36,7 @@ export const settingsApi = {
 
   sendTestTelegram(payload: { botToken?: string; chatId: string }) {
     return apiClient
-      .post<{ success: boolean; results: any[] }>('/settings/telegram/test', payload)
+      .post<{ success: boolean; results: unknown[] }>('/settings/telegram/test', payload)
       .then((res) => res.data);
   },
 };
