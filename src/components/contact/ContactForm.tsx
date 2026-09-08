@@ -50,19 +50,19 @@ const schema = z
       .or(z.literal('')),
   })
   .superRefine((data, ctx) => {
-    const hasFullName = !!data.fullName && data.fullName.trim().length > 0;
     const hasPhone = !!data.phone && data.phone.trim().length > 0;
+    const hasEmail = !!data.email && data.email.trim().length > 0;
 
-    if (!hasFullName && !hasPhone) {
+    if (!hasPhone && !hasEmail) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Vui lòng nhập Số điện thoại hoặc Họ tên',
+        message: 'Vui lòng nhập Số điện thoại hoặc Email',
         path: ['phone'],
       });
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Vui lòng nhập Số điện thoại hoặc Họ tên',
-        path: ['fullName'],
+        message: 'Vui lòng nhập Số điện thoại hoặc Email',
+        path: ['email'],
       });
       return;
     }
@@ -120,24 +120,19 @@ export default function ContactForm({ sourcePage }: ContactFormProps) {
     setError(null);
     setSuccess(false);
     try {
-      const fullName = values.fullName?.trim() || undefined;
-      const phone = values.phone?.trim() || undefined;
-      const email = values.email?.trim() || undefined;
-      const subject = values.subject?.trim() || 'Yêu cầu tư vấn gửi hàng';
-      const message =
-        values.message?.trim() ||
-        'Khách hàng để lại thông tin yêu cầu tư vấn chuyển phát trên website.';
+      const payload: Record<string, string> = {};
+      if (values.fullName?.trim()) payload.fullName = values.fullName.trim();
+      if (values.phone?.trim()) payload.phone = values.phone.trim();
+      if (values.email?.trim()) payload.email = values.email.trim();
+      if (values.subject?.trim()) payload.subject = values.subject.trim();
+      if (values.message?.trim()) payload.message = values.message.trim();
+      if (sourcePage) {
+        payload.sourcePage = sourcePage;
+      } else if (typeof window !== 'undefined' && window.location.pathname) {
+        payload.sourcePage = window.location.pathname;
+      }
 
-      await contactApi.create({
-        fullName,
-        phone,
-        email,
-        subject,
-        message,
-        sourcePage:
-          sourcePage ||
-          (typeof window !== 'undefined' ? window.location.pathname : undefined),
-      });
+      await contactApi.create(payload as any);
       setSuccess(true);
       reset();
     } catch (err) {

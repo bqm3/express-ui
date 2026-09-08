@@ -200,6 +200,15 @@ export interface CreateContactPayload {
   recaptchaToken?: string;
 }
 
+export interface TelegramChat {
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  title?: string;
+  type: string;
+}
+
 export interface TelegramUpdateItem {
   update_id: number;
   message?: {
@@ -211,23 +220,12 @@ export interface TelegramUpdateItem {
       last_name?: string;
       username?: string;
     };
-    chat?: {
-      id: number;
-      first_name?: string;
-      last_name?: string;
-      username?: string;
-      title?: string;
-      type: string;
-    };
+    chat?: TelegramChat;
     date: number;
     text?: string;
   };
   my_chat_member?: {
-    chat?: {
-      id: number;
-      title?: string;
-      type: string;
-    };
+    chat?: TelegramChat;
   };
 }
 
