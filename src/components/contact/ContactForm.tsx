@@ -10,12 +10,10 @@ import {
   Button,
   Stack,
   TextField,
-  Typography,
 } from '@mui/material';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { contactApi } from '@/lib/api/contactApi';
-import { brandColors } from '@/lib/theme';
+import type { CreateContactPayload } from '@/types';
 
 const schema = z
   .object({
@@ -132,7 +130,7 @@ export default function ContactForm({ sourcePage }: ContactFormProps) {
         payload.sourcePage = window.location.pathname;
       }
 
-      await contactApi.create(payload as any);
+      await contactApi.create(payload as CreateContactPayload);
       setSuccess(true);
       reset();
     } catch (err) {
