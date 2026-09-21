@@ -26,7 +26,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Dịch vụ gửi hàng đi nước ngoài, Mỹ, Úc, Âu bao thuế | GIA LONG LOGISTICS',
+    default: 'Nhận gửi hàng từ Hà Nội & TP.HCM đi Mỹ, Nhật Bản, Trung Quốc, Úc, Canada, Anh, EU, Hàn Quốc, Đài Loan và nhiều quốc gia khác',
     template: '%s | GIA LONG LOGISTICS',
   },
   description:
