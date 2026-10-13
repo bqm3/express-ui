@@ -11,6 +11,7 @@ import {
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import GLLogo from '@/components/common/GLLogo';
+import { normalizePhoneLink, removePhoneDots } from '@/lib/contactChannel';
 import { brandColors } from '@/lib/theme';
 import type { FooterBranch, SiteSettings } from '@/types';
 
@@ -46,8 +47,12 @@ interface FooterProps {
 }
 
 export default function Footer({ settings }: FooterProps) {
-  const footerHotline = settings?.footer_hotline || 'Hotline 0907.277.502';
-  const footerHotlineLink = settings?.footer_hotline_link || 'tel:0907277502';
+  const footerHotline = removePhoneDots(
+    settings?.footer_hotline || 'Hotline 0983342004',
+  );
+  const footerHotlineLink = normalizePhoneLink(
+    settings?.footer_hotline_link || '0983342004',
+  );
 
   let branches: FooterBranch[] = [];
   try {
@@ -65,14 +70,10 @@ export default function Footer({ settings }: FooterProps) {
     branches = [
       {
         title: '',
-        address: 'Số 5 Nguyễn Văn Vĩnh, P.4, Q. Tân Bình, TP.HCM',
-        phone: 'ĐT: (028) 6678 1779',
-      },
-      {
-        title: 'GLLogistics Quy Nhơn — Bình Định',
         address: '',
-        phone: 'ĐT: (056) 353 1419 — 091 442 7842',
+        phone: '',
       },
+     
     ];
   }
 
@@ -124,7 +125,7 @@ export default function Footer({ settings }: FooterProps) {
                     )}
                     {b.phone && (
                       <Box component="span" sx={{ display: 'block', opacity: 0.9 }}>
-                        {b.phone}
+                        {removePhoneDots(b.phone)}
                       </Box>
                     )}
                   </Typography>

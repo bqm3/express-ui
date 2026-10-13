@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Be_Vietnam_Pro, Archivo_Narrow, JetBrains_Mono } from 'next/font/google';
-import Script from 'next/script'
+import Script from 'next/script';
 import AppProviders from '@/components/providers/AppProviders';
 import './globals.css';
 
@@ -50,8 +50,8 @@ export default function RootLayout({
         className={`${beVietnamPro.variable} ${archivoNarrow.variable} ${jetbrainsMono.variable}`}
       >
         <AppProviders>{children}</AppProviders>
-         <Script
-          src="https://googletagmanager.com"
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18465550690"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">

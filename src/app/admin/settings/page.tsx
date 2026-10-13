@@ -32,6 +32,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { settingsApi } from '@/lib/api/settingsApi';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { brandColors } from '@/lib/theme';
+import { normalizePhoneLink, removePhoneDots } from '@/lib/contactChannel';
 import type { FooterBranch } from '@/types';
 
 export default function AdminSettingsPage() {
@@ -74,10 +75,10 @@ export default function AdminSettingsPage() {
         map.header_title ??
           'Dịch vụ gửi hàng đi nước ngoài uy tín — giá rẻ TP.HCM | 15 năm kinh nghiệm',
       );
-      setHeaderHotline(map.header_hotline ?? 'Hotline 0907.277.502');
-      setHeaderHotlineLink(map.header_hotline_link ?? 'tel:0907277502');
-      setFooterHotline(map.footer_hotline ?? 'Hotline 0907.277.502');
-      setFooterHotlineLink(map.footer_hotline_link ?? 'tel:0907277502');
+      setHeaderHotline(map.header_hotline ?? 'Hotline 0983342004');
+      setHeaderHotlineLink(map.header_hotline_link ?? 'tel:0983342004');
+      setFooterHotline(map.footer_hotline ?? 'Hotline 0983342004');
+      setFooterHotlineLink(map.footer_hotline_link ?? 'tel:0983342004');
       setShowGoogleMap(map.show_google_map === 'true');
       setGoogleMapEmbedUrl(map.google_map_embed_url ?? '');
 
@@ -159,14 +160,17 @@ export default function AdminSettingsPage() {
     try {
       const validBranches = branches.filter(
         (b) => (b.title || '').trim() || (b.address || '').trim() || (b.phone || '').trim(),
-      );
+      ).map((b) => ({
+        ...b,
+        phone: removePhoneDots(b.phone),
+      }));
 
       await settingsApi.updateSettings({
         header_title: headerTitle.trim(),
-        header_hotline: headerHotline.trim(),
-        header_hotline_link: headerHotlineLink.trim(),
-        footer_hotline: footerHotline.trim(),
-        footer_hotline_link: footerHotlineLink.trim(),
+        header_hotline: removePhoneDots(headerHotline).trim(),
+        header_hotline_link: normalizePhoneLink(headerHotlineLink),
+        footer_hotline: removePhoneDots(footerHotline).trim(),
+        footer_hotline_link: normalizePhoneLink(footerHotlineLink),
         footer_branches: JSON.stringify(validBranches),
         show_google_map: showGoogleMap ? 'true' : 'false',
         google_map_embed_url: googleMapEmbedUrl.trim(),
@@ -323,7 +327,7 @@ export default function AdminSettingsPage() {
                       fullWidth
                       value={headerHotline}
                       onChange={(e) => setHeaderHotline(e.target.value)}
-                      placeholder="Hotline 0907.277.502"
+                      placeholder="Hotline 0983342004"
                     />
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6 }}>
@@ -332,8 +336,8 @@ export default function AdminSettingsPage() {
                       fullWidth
                       value={headerHotlineLink}
                       onChange={(e) => setHeaderHotlineLink(e.target.value)}
-                      placeholder="tel:0907277502"
-                      helperText="Ví dụ: tel:0907277502 hoặc link Zalo/URL"
+                      placeholder="tel:0983342004"
+                      helperText="Ví dụ: tel:0983342004 hoặc link Zalo/URL"
                     />
                   </Grid>
                 </Grid>
@@ -462,7 +466,7 @@ export default function AdminSettingsPage() {
                     fullWidth
                     value={footerHotline}
                     onChange={(e) => setFooterHotline(e.target.value)}
-                    placeholder="Hotline 0907.277.502"
+                    placeholder="Hotline 0983342004"
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
@@ -471,7 +475,7 @@ export default function AdminSettingsPage() {
                     fullWidth
                     value={footerHotlineLink}
                     onChange={(e) => setFooterHotlineLink(e.target.value)}
-                    placeholder="tel:0907277502"
+                    placeholder="tel:0983342004"
                   />
                 </Grid>
               </Grid>

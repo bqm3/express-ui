@@ -12,19 +12,36 @@ export function contactChannelLabel(channel: ContactChannelType) {
   return channelLabels[channel] || channel;
 }
 
+export function removePhoneDots(value?: string | null) {
+  return (value || '').replace(/(\d)\.(?=\d)/g, '$1');
+}
+
+export function phoneHref(value?: string | null) {
+  const digits = removePhoneDots(value).replace(/\D/g, '');
+  return digits ? `tel:${digits}` : '#';
+}
+
+export function normalizePhoneLink(value?: string | null) {
+  const raw = (value || '').trim();
+  if (!raw) return '#';
+
+  const withoutDots = removePhoneDots(raw);
+  if (/^tel:/i.test(withoutDots)) return phoneHref(withoutDots);
+  if (/^[\d\s()+-]+$/.test(withoutDots)) return phoneHref(withoutDots);
+  return withoutDots;
+}
+
 /** Build clickable href from channel + value */
 export function contactChannelHref(item: Pick<ContactChannel, 'channel' | 'value'>) {
   const raw = (item.value || '').trim();
   if (!raw) return '#';
 
   switch (item.channel) {
-    case 'phone': {
-      const digits = raw.replace(/\D/g, '');
-      return digits ? `tel:${digits}` : '#';
-    }
+    case 'phone':
+      return phoneHref(raw);
     case 'zalo': {
       if (/^https?:\/\//i.test(raw)) return raw;
-      const digits = raw.replace(/\D/g, '');
+      const digits = removePhoneDots(raw).replace(/\D/g, '');
       return digits ? `https://zalo.me/${digits}` : raw;
     }
     case 'facebook':
@@ -38,5 +55,8 @@ export function contactChannelHref(item: Pick<ContactChannel, 'channel' | 'value
 }
 
 export function contactChannelDisplay(item: ContactChannel) {
-  return item.displayValue || item.value;
+  const value = item.displayValue || item.value;
+  return item.channel === 'phone' || item.channel === 'zalo'
+    ? removePhoneDots(value)
+    : value;
 }

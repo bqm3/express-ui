@@ -27,7 +27,7 @@ import AdminTable, {
   type DataTableColumn,
 } from '@/components/admin/AdminTable';
 import { contactChannelsApi } from '@/lib/api/contactChannelsApi';
-import { contactChannelLabel } from '@/lib/contactChannel';
+import { contactChannelLabel, removePhoneDots } from '@/lib/contactChannel';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { useDebounce } from '@/hooks/useDebounce';
 import type { ContactChannel, ContactChannelType } from '@/types';
@@ -119,11 +119,19 @@ export default function AdminContactChannelsPage() {
     }
     setSaving(true);
     try {
+      const shouldNormalizePhone =
+        form.channel === 'phone' || form.channel === 'zalo';
+      const value = shouldNormalizePhone
+        ? removePhoneDots(form.value)
+        : form.value;
+      const displayValue = shouldNormalizePhone
+        ? removePhoneDots(form.displayValue)
+        : form.displayValue;
       const payload = {
         name: form.name.trim(),
         channel: form.channel,
-        value: form.value.trim(),
-        displayValue: form.displayValue.trim() || undefined,
+        value: value.trim(),
+        displayValue: displayValue.trim() || undefined,
         orderIndex: Number(form.orderIndex) || 0,
         isActive: form.isActive,
       };
@@ -285,7 +293,7 @@ export default function AdminContactChannelsPage() {
               fullWidth
               value={form.value}
               onChange={(e) => setForm((f) => ({ ...f, value: e.target.value }))}
-              helperText="VD: 0907277502 · https://zalo.me/... · https://facebook.com/..."
+              helperText="VD: 0983342004 · https://zalo.me/... · https://facebook.com/..."
             />
             <TextField
               label="Hiển thị (tuỳ chọn)"
@@ -294,7 +302,7 @@ export default function AdminContactChannelsPage() {
               onChange={(e) =>
                 setForm((f) => ({ ...f, displayValue: e.target.value }))
               }
-              placeholder="0907.277.502"
+              placeholder="0983342004"
             />
             <TextField
               label="Thứ tự"

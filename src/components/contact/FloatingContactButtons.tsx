@@ -5,7 +5,10 @@ import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkIcon from '@mui/icons-material/Link';
 import type { ContactChannel, ContactChannelType } from '@/types';
-import { contactChannelHref } from '@/lib/contactChannel';
+import {
+  contactChannelDisplay,
+  contactChannelHref,
+} from '@/lib/contactChannel';
 import { brandColors } from '@/lib/theme';
 
 function ChannelIcon({ channel }: { channel: ContactChannelType }) {
@@ -81,6 +84,7 @@ export default function FloatingContactButtons({
     >
       {contacts.map((c, idx) => {
         const href = contactChannelHref(c);
+        const display = contactChannelDisplay(c);
         const isExternal = c.channel !== 'phone' && c.channel !== 'email';
         const bg = channelBg(c.channel);
         const isZalo = c.channel === 'zalo';
@@ -88,13 +92,7 @@ export default function FloatingContactButtons({
         return (
           <Tooltip
             key={c.id}
-            title={`${c.name}${
-              c.displayValue
-                ? ` — ${c.displayValue}`
-                : c.value
-                  ? ` — ${c.value}`
-                  : ''
-            }`}
+            title={`${c.name}${display ? ` - ${display}` : ''}`}
             placement="left"
             arrow
           >

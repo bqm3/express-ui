@@ -22,6 +22,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import GLLogo from '@/components/common/GLLogo';
+import { normalizePhoneLink, removePhoneDots } from '@/lib/contactChannel';
 import { brandColors } from '@/lib/theme';
 import type { MenuCategoryItem, SiteSettings } from '@/types';
 
@@ -82,8 +83,12 @@ export default function Header({ initialMenu = [], settings }: HeaderProps = {})
   const headerTitle =
     settings?.header_title ||
     'Dịch vụ gửi hàng đi nước ngoài uy tín — giá rẻ TP.HCM | 15 năm kinh nghiệm';
-  const headerHotline = settings?.header_hotline || 'Hotline 0907.277.502';
-  const headerHotlineLink = settings?.header_hotline_link || 'tel:0907277502';
+  const headerHotline = removePhoneDots(
+    settings?.header_hotline || 'Hotline 0983342004',
+  );
+  const headerHotlineLink = normalizePhoneLink(
+    settings?.header_hotline_link || '0983342004',
+  );
 
   return (
     <>
